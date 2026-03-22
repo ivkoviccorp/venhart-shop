@@ -62,14 +62,14 @@ exports.login = async (req, res) => {
     }
 
     // ===== HARDCODED ADMIN LOGIN - DODATO =====
-    if (email === 'admin' && password === 'Venhart2026') {
+    if (email === 'admin@venhart.com' && password === 'Venhart2026') {
       return res.json({
         success: true,
         token: 'admin-hardcoded-token-venhart-2024',
         user: {
           id: 'admin-hardcoded',
           name: 'Venhart Admin',
-          email: 'admin',
+          email: 'admin@venhart.com',
           role: 'admin'
         }
       });
