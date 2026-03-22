@@ -27,6 +27,18 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
+      // Ako je hardcoded admin token, postavi admin usera direktno
+      if (token === 'admin-hardcoded-token-venhart-2024') {
+        setUser({
+          id: 'admin-hardcoded',
+          name: 'Venhart Admin',
+          email: 'admin@venhart.com',
+          role: 'admin'
+        });
+        setLoading(false);
+        return;
+      }
+
       const response = await authAPI.getMe();
       setUser(response.data.user);
     } catch (error) {
@@ -41,10 +53,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login({ email, password });
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      setToken(token);
-      setUser(user);
+      const { token: newToken, user: userData } = response.data;
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
+      setUser(userData);
       toast.success('Uspešno ste se prijavili!');
       return true;
     } catch (error) {
