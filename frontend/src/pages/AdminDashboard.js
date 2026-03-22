@@ -24,18 +24,21 @@ import AdminOrders from '../components/admin/AdminOrders';
 import AdminOrderDetail from '../components/admin/AdminOrderDetail';
 
 const AdminDashboard = () => {
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Sačekaj da se auth učita
+    if (authLoading) return;
+    
     if (!user || !isAdmin) {
       navigate('/admin/login');
       return;
     }
     fetchStats();
-  }, [user, isAdmin, navigate]);
+  }, [user, isAdmin, navigate, authLoading]);
 
   const fetchStats = async () => {
     try {
@@ -52,6 +55,11 @@ const AdminDashboard = () => {
     logout();
     navigate('/');
   };
+
+  // Čekaj auth
+  if (authLoading) {
+    return <div className="loading">Učitavanje...</div>;
+  }
 
   if (!user || !isAdmin) {
     return <Navigate to="/admin/login" />;
