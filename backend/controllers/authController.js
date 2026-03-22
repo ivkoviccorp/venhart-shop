@@ -61,11 +61,17 @@ exports.login = async (req, res) => {
       });
     }
 
-    // ===== HARDCODED ADMIN LOGIN - DODATO =====
+    // ===== HARDCODED ADMIN LOGIN =====
     if (email === 'admin@venhart.com' && password === 'Venhart2026') {
+      const jwt = require('jsonwebtoken');
+      const token = jwt.sign(
+        { id: 'admin-hardcoded', role: 'admin' },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE || '7d' }
+      );
       return res.json({
         success: true,
-        token: 'admin-hardcoded-token-venhart-2024',
+        token,
         user: {
           id: 'admin-hardcoded',
           name: 'Venhart Admin',
@@ -118,6 +124,19 @@ exports.login = async (req, res) => {
 // @route   GET /api/auth/me
 exports.getMe = async (req, res) => {
   try {
+    // Hardcoded admin provera
+    if (req.user.id === 'admin-hardcoded') {
+      return res.json({
+        success: true,
+        user: {
+          id: 'admin-hardcoded',
+          name: 'Venhart Admin',
+          email: 'admin@venhart.com',
+          role: 'admin'
+        }
+      });
+    }
+
     const user = await User.findById(req.user.id);
     res.json({
       success: true,

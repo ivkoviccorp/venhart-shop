@@ -18,6 +18,19 @@ exports.protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Hardcoded admin provera
+    if (decoded.id === 'admin-hardcoded') {
+      req.user = {
+        _id: 'admin-hardcoded',
+        id: 'admin-hardcoded',
+        name: 'Venhart Admin',
+        email: 'admin@venhart.com',
+        role: 'admin'
+      };
+      return next();
+    }
+
     req.user = await User.findById(decoded.id);
 
     if (!req.user) {

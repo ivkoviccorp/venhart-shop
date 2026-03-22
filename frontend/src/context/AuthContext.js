@@ -27,18 +27,6 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      // Ako je hardcoded admin token, postavi admin usera direktno
-      if (token === 'admin-hardcoded-token-venhart-2024') {
-        setUser({
-          id: 'admin-hardcoded',
-          name: 'Venhart Admin',
-          email: 'admin@venhart.com',
-          role: 'admin'
-        });
-        setLoading(false);
-        return;
-      }
-
       const response = await authAPI.getMe();
       setUser(response.data.user);
     } catch (error) {
