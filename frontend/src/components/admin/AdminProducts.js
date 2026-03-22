@@ -1,19 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { productsAPI } from '../../utils/api';
 import { toast } from 'react-toastify';
-import { FiPlus, FiEdit2, FiTrash2, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiEye, FiEyeOff, FiFilter } from 'react-icons/fi';
 import ProductForm from './ProductForm';
 import './AdminProducts.css';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Lista kategorija za filter
+  const categories = [
+    'Muška odela',
+    'Muške košulje i natkošulje',
+    'Muške farmerke',
+    'Muške pantalone',
+    'Ženska odela',
+    'Ženski kompleti',
+    'Haljine',
+    'Bluze',
+    'Suknje',
+    'Ženske pantalone',
+    'Jakne i kaputi',
+    'Kravate',
+    'Čarape',
+    'Aksesoari',
+    'Cipele',
+    'Torbe',
+    'Ostalo'
+  ];
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  // Filtriraj proizvode kad se promeni kategorija ili proizvodi
+  useEffect(() => {
+    if (selectedCategory === 'all') {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter(p => p.category === selectedCategory));
+    }
+  }, [selectedCategory, products]);
 
   const fetchProducts = async () => {
     try {
@@ -67,6 +99,10 @@ const AdminProducts = () => {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   if (loading) {
     return <div className="loading">Učitavanje...</div>;
   }
@@ -74,13 +110,46 @@ const AdminProducts = () => {
   return (
     <div className="admin-products">
       <div className="admin-products-header">
-        <h1 className="admin-page-title">Proizvodi ({products.length})</h1>
+        <h1 className="admin-page-title">Proizvodi ({filteredProducts.length})</h1>
         <button 
           className="btn btn-add-product" 
           onClick={() => setShowForm(true)}
         >
           <FiPlus /> Dodaj proizvod
         </button>
+      </div>
+
+      {/* NOVO: Filter po kategorijama */}
+      <div className="admin-products-filter">
+        <div className="filter-group">
+          <FiFilter className="filter-icon" />
+          <label htmlFor="categoryFilter">Filtriraj po kategoriji:</label>
+          <select 
+            id="categoryFilter"
+            value={selectedCategory} 
+            onChange={handleCategoryChange}
+            className="category-select"
+          >
+            <option value="all">Sve kategorije ({products.length})</option>
+            {categories.map((cat) => {
+              const count = products.filter(p => p.category === cat).length;
+              return (
+                <option key={cat} value={cat}>
+                  {cat} ({count})
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        
+        {selectedCategory !== 'all' && (
+          <button 
+            className="btn btn-clear-filter"
+            onClick={() => setSelectedCategory('all')}
+          >
+            ✕ Poništi filter
+          </button>
+        )}
       </div>
 
       {/* Product Form Modal */}
@@ -106,7 +175,7 @@ const AdminProducts = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <tr key={product._id} className={!product.active ? 'inactive' : ''}>
                 <td>
                   <img 
@@ -169,9 +238,13 @@ const AdminProducts = () => {
           </tbody>
         </table>
 
-        {products.length === 0 && (
+        {filteredProducts.length === 0 && (
           <div className="no-products">
-            <p>Nema proizvoda. Dodajte prvi proizvod!</p>
+            <p>
+              {selectedCategory === 'all' 
+                ? 'Nema proizvoda. Dodajte prvi proizvod!' 
+                : `Nema proizvoda u kategoriji "${selectedCategory}".`}
+            </p>
           </div>
         )}
       </div>

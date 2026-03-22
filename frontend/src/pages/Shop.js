@@ -20,6 +20,8 @@ const Shop = () => {
     'Muške pantalone',
     'Ženska odela',
     'Ženski kompleti',
+    'Kravate',
+    'Carape',
     'Haljine',
     'Bluze',
     'Suknje',

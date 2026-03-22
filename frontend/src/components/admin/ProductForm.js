@@ -30,6 +30,7 @@ const ProductForm = ({ product, onClose }) => {
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
+  // IZMENJENO: Dodate kategorije "Kravate" i "Čarape"
   const categories = [
     'Muška odela',
     'Muške košulje i natkošulje',
@@ -42,6 +43,8 @@ const ProductForm = ({ product, onClose }) => {
     'Suknje',
     'Ženske pantalone',
     'Jakne i kaputi',
+    'Kravate',
+    'Čarape',
     'Aksesoari',
     'Cipele',
     'Torbe',

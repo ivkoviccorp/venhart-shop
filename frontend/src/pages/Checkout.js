@@ -25,7 +25,8 @@ const Checkout = () => {
     note: '',
   });
 
-  const shippingCost = deliveryMethod === 'delivery' ? 450 : 0;
+  // IZMENJENO: Dostava je sada besplatna
+  const shippingCost = 0;
   const giftWrapCost = giftWrap ? 200 : 0;
   const totalAmount = getTotalPrice() + shippingCost + giftWrapCost;
 
@@ -194,7 +195,7 @@ const Checkout = () => {
                     </div>
                     <div className="option-content">
                       <strong>Dostava brzom poštom</strong>
-                      <p className="option-price">450 RSD</p>
+                      
                       <p className="option-note">Isporuka u roku od 2-4 radna dana na teritoriji Srbije</p>
                     </div>
                   </label>
@@ -305,8 +306,8 @@ const Checkout = () => {
                 </div>
 
                 <div className="summary-row">
-                  <span>Dostava:</span>
-                  <span>{shippingCost === 0 ? 'Besplatno' : `${shippingCost.toLocaleString()} RSD`}</span>
+                  
+                  
                 </div>
 
                 {giftWrap && (
