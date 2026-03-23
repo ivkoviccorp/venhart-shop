@@ -1,19 +1,9 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  });
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email kupcu - porudžbina primljena
 exports.sendOrderConfirmation = async (order) => {
-  const transporter = createTransporter();
-
   const itemsList = order.items.map(item =>
     `<tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.name}</td>
@@ -66,8 +56,8 @@ exports.sendOrderConfirmation = async (order) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"Venhart Concept Store" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Venhart Concept Store <onboarding@resend.dev>',
     to: order.customer.email,
     subject: `Potvrda porudžbine #${order.orderNumber} - Venhart`,
     html
@@ -76,8 +66,6 @@ exports.sendOrderConfirmation = async (order) => {
 
 // Email adminu - nova porudžbina
 exports.sendAdminNotification = async (order) => {
-  const transporter = createTransporter();
-
   const itemsList = order.items.map(item =>
     `• ${item.name} (Vel: ${item.size || '-'}, Kom: ${item.quantity}) - ${item.price.toLocaleString()} RSD`
   ).join('\n');
@@ -101,8 +89,8 @@ exports.sendAdminNotification = async (order) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"Venhart Shop" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Venhart Shop <onboarding@resend.dev>',
     to: process.env.ADMIN_EMAIL,
     subject: `🔔 Nova porudžbina #${order.orderNumber}`,
     html
@@ -111,8 +99,6 @@ exports.sendAdminNotification = async (order) => {
 
 // Email kupcu - porudžbina prihvaćena
 exports.sendOrderAccepted = async (order) => {
-  const transporter = createTransporter();
-
   const deliveryInfo = order.deliveryMethod === 'pickup'
     ? `<div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3 style="margin-top: 0; color: #1a1a1a;">📍 Preuzimanje u butiku</h3>
@@ -160,8 +146,8 @@ exports.sendOrderAccepted = async (order) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"Venhart Concept Store" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Venhart Concept Store <onboarding@resend.dev>',
     to: order.customer.email,
     subject: `✅ Porudžbina #${order.orderNumber} odobrena - Venhart`,
     html
@@ -170,8 +156,6 @@ exports.sendOrderAccepted = async (order) => {
 
 // Email kupcu - porudžbina odbijena
 exports.sendOrderRejected = async (order) => {
-  const transporter = createTransporter();
-
   const html = `
     <div style="font-family: 'Helvetica', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background: #1a1a1a; padding: 30px; text-align: center;">
@@ -202,8 +186,8 @@ exports.sendOrderRejected = async (order) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"Venhart Concept Store" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Venhart Concept Store <onboarding@resend.dev>',
     to: order.customer.email,
     subject: `Porudžbina #${order.orderNumber} - Venhart`,
     html
