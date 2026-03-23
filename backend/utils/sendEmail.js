@@ -2,15 +2,10 @@ const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT) || 465,
-    secure: process.env.EMAIL_PORT === '465' ? true : false,
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
-    },
-    tls: {
-      rejectUnauthorized: false
     }
   });
 };
@@ -22,7 +17,7 @@ exports.sendOrderConfirmation = async (order) => {
   const itemsList = order.items.map(item =>
     `<tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.name}</td>
-      <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.size}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.size || '-'}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.quantity}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.price.toLocaleString()} RSD</td>
     </tr>`
@@ -84,7 +79,7 @@ exports.sendAdminNotification = async (order) => {
   const transporter = createTransporter();
 
   const itemsList = order.items.map(item =>
-    `• ${item.name} (Vel: ${item.size}, Kom: ${item.quantity}) - ${item.price.toLocaleString()} RSD`
+    `• ${item.name} (Vel: ${item.size || '-'}, Kom: ${item.quantity}) - ${item.price.toLocaleString()} RSD`
   ).join('\n');
 
   const html = `
@@ -141,10 +136,7 @@ exports.sendOrderAccepted = async (order) => {
       </div>
       <div style="padding: 30px; background: #fff;">
         <div style="text-align: center; margin-bottom: 30px;">
-          <div style="width: 80px; height: 80px; background: #27ae60; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 40px; color: white;">✓</span>
-          </div>
-          <h2 style="color: #27ae60; margin: 0;">Porudžbina odobrena!</h2>
+          <h2 style="color: #27ae60; margin: 0;">✅ Porudžbina odobrena!</h2>
         </div>
         
         <p>Poštovani/a ${order.customer.firstName},</p>
@@ -196,7 +188,7 @@ exports.sendOrderRejected = async (order) => {
         <p>Za više informacija, kontaktirajte nas:</p>
         <ul style="color: #666;">
           <li>Telefon: 063 755 5245</li>
-          <li>Email: venhartkonceptstore@gmail.com</li>
+          <li>Email: venhartconceptstore@gmail.com</li>
           <li>Instagram: <a href="https://www.instagram.com/venhart.store/" style="color: #d4a574;">@venhart.store</a></li>
         </ul>
         
