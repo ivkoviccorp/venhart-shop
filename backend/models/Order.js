@@ -80,11 +80,23 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-// Generiši broj porudžbine pre čuvanja
+// Generiši UNIKATAN broj porudžbine pre čuvanja
 orderSchema.pre('save', async function() {
   if (!this.orderNumber) {
-    const count = await mongoose.model('Order').countDocuments();
-    this.orderNumber = `VH-${String(count + 1001).padStart(5, '0')}`;
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2);
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    
+    this.orderNumber = `VH-${year}${month}${day}-${random}`;
+    
+    // Proveri da li već postoji, ako da generiši ponovo
+    const exists = await mongoose.model('Order').findOne({ orderNumber: this.orderNumber });
+    if (exists) {
+      const random2 = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+      this.orderNumber = `VH-${year}${month}${day}-${random2}`;
+    }
   }
 });
 
