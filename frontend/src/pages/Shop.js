@@ -53,6 +53,10 @@ const Shop = () => {
     setFilters({ ...filters, [key]: value });
   };
 
+  const showSuitPromo =
+    filters.category === 'Muška odela' ||
+    products.some((product) => product.category === 'Muška odela');
+
   return (
     <div className="shop">
       <div className="container">
@@ -95,6 +99,18 @@ const Shop = () => {
             <option value="name">Ime: A-Z</option>
           </select>
         </div>
+
+        {/* PROMO BANNER ZA MUŠKA ODELA */}
+        {showSuitPromo && (
+          <div className="shop-promo-banner">
+            <div className="promo-badge">SPECIJALNA PONUDA</div>
+            <h2>UZ SVAKO MUŠKO ODELO — KRAVATA 20% JEFTINIJE! 🎉</h2>
+            <p>
+              Iskoristite ekskluzivnu pogodnost i upotpunite elegantan izgled uz kravatu
+              po specijalnoj ceni. Savršena kombinacija za poslovne i svečane prilike.
+            </p>
+          </div>
+        )}
 
         {/* Products Grid */}
         {loading ? (
