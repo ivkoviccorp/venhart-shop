@@ -86,7 +86,7 @@ const About = () => {
                 <FaEnvelope />
               </div>
               <h4>Email</h4>
-              <a href="mailto:venhartkonceptstore@gmail.com">venhartkonceptstore@gmail.com</a>
+              <a href="mailto:venhartconceptstore@gmail.com">venhartconceptstore@gmail.com</a>
             </div>
 
             <div className="contact-item">
