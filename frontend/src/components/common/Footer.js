@@ -30,7 +30,7 @@ const Footer = () => {
               <FaPhone /> <a href="tel:+381637555245">063 755 5245</a>
             </li>
             <li>
-              <FaEnvelope /> <a href="mailto:venhartconceptstore@gmail.com">venhartkonceptstore@gmail.com</a>
+              <FaEnvelope /> <a href="mailto:venhartconceptstore@gmail.com">venhartconceptstore@gmail.com</a>
             </li>
           </ul>
         </div>
