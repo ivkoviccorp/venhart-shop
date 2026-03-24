@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
+import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
 import './Home.css';
 
 const Home = () => {
@@ -33,6 +34,53 @@ const Home = () => {
           <Link to="/shop" className="btn btn-hero">
             Pogledaj kolekciju
           </Link>
+        </div>
+      </section>
+
+      {/* Trust / Benefits Section */}
+      <section className="benefits-section">
+        <div className="container">
+          <div className="benefits-grid">
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FiShield />
+              </div>
+              <h3>Bez rizika kupovine</h3>
+              <p>Sigurna i pouzdana porudžbina uz proverene proizvode i podršku.</p>
+            </div>
+
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FiRefreshCw />
+              </div>
+              <h3>Zamena veličine u roku od 7 dana</h3>
+              <p>Ukoliko veličina ne odgovara, omogućena je brza zamena.</p>
+            </div>
+
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FiTruck />
+              </div>
+              <h3>Brza dostava 24–48h</h3>
+              <p>Poručite danas, a vaša pošiljka stiže brzo i sigurno.</p>
+            </div>
+
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FiCreditCard />
+              </div>
+              <h3>Plaćanje pouzećem</h3>
+              <p>Jednostavno i sigurno plaćanje prilikom preuzimanja porudžbine.</p>
+            </div>
+
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FiCheckCircle />
+              </div>
+              <h3>100% sigurna kupovina</h3>
+              <p>Profesionalna usluga, kvalitet i pažljivo odabrani modni komadi.</p>
+            </div>
+          </div>
         </div>
       </section>
 
