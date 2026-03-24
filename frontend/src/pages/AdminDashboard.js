@@ -14,7 +14,9 @@ import {
   FiSettings,
   FiTrash2,
   FiAlertTriangle,
-  FiRefreshCw
+  FiRefreshCw,
+  FiCalendar,
+  FiBarChart2
 } from 'react-icons/fi';
 import './AdminDashboard.css';
 
@@ -30,7 +32,6 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Sačekaj da se auth učita
     if (authLoading) return;
     
     if (!user || !isAdmin) {
@@ -56,7 +57,6 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  // Čekaj auth
   if (authLoading) {
     return <div className="loading">Učitavanje...</div>;
   }
@@ -161,6 +161,48 @@ const DashboardHome = ({ stats, loading, onRefresh }) => {
           <div className="stat-info">
             <h3>Ukupan prihod</h3>
             <p className="stat-number">{stats?.totalRevenue?.toLocaleString() || 0} RSD</p>
+          </div>
+        </div>
+
+        {/* NOVO - Danas */}
+        <div className="stat-card">
+          <div className="stat-icon today-orders">
+            <FiCalendar size={30} />
+          </div>
+          <div className="stat-info">
+            <h3>Porudžbine danas</h3>
+            <p className="stat-number">{stats?.ordersToday || 0}</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon today-revenue">
+            <FiDollarSign size={30} />
+          </div>
+          <div className="stat-info">
+            <h3>Prihod danas</h3>
+            <p className="stat-number">{stats?.revenueToday?.toLocaleString() || 0} RSD</p>
+          </div>
+        </div>
+
+        {/* NOVO - Ove nedelje */}
+        <div className="stat-card">
+          <div className="stat-icon week-orders">
+            <FiBarChart2 size={30} />
+          </div>
+          <div className="stat-info">
+            <h3>Porudžbine ove nedelje</h3>
+            <p className="stat-number">{stats?.ordersThisWeek || 0}</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon week-revenue">
+            <FiTrendingUp size={30} />
+          </div>
+          <div className="stat-info">
+            <h3>Prihod ove nedelje</h3>
+            <p className="stat-number">{stats?.revenueThisWeek?.toLocaleString() || 0} RSD</p>
           </div>
         </div>
       </div>

@@ -207,6 +207,67 @@ exports.getDashboardStats = async (req, res) => {
 
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
 
+    // DANAS
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const ordersToday = await Order.countDocuments({
+      createdAt: { $gte: todayStart, $lte: todayEnd }
+    });
+
+    const revenueTodayResult = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: todayStart, $lte: todayEnd },
+          status: { $in: ['accepted', 'shipped', 'delivered'] }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$totalAmount' }
+        }
+      }
+    ]);
+
+    const revenueToday = revenueTodayResult.length > 0 ? revenueTodayResult[0].total : 0;
+
+    // OVE NEDELJE
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sunday
+    const diffToMonday = day === 0 ? 6 : day - 1;
+
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - diffToMonday);
+    weekStart.setHours(0, 0, 0, 0);
+
+    const weekEnd = new Date();
+    weekEnd.setHours(23, 59, 59, 999);
+
+    const ordersThisWeek = await Order.countDocuments({
+      createdAt: { $gte: weekStart, $lte: weekEnd }
+    });
+
+    const revenueThisWeekResult = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: weekStart, $lte: weekEnd },
+          status: { $in: ['accepted', 'shipped', 'delivered'] }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$totalAmount' }
+        }
+      }
+    ]);
+
+    const revenueThisWeek = revenueThisWeekResult.length > 0 ? revenueThisWeekResult[0].total : 0;
+
     const recentOrders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5);
@@ -219,6 +280,10 @@ exports.getDashboardStats = async (req, res) => {
         acceptedOrders,
         rejectedOrders,
         totalRevenue,
+        ordersToday,
+        revenueToday,
+        ordersThisWeek,
+        revenueThisWeek,
         recentOrders
       }
     });
