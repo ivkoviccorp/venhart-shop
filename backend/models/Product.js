@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'Opis proizvoda je obavezan']
+    default: ''
   },
   price: {
     type: Number,
@@ -44,16 +44,18 @@ const productSchema = new mongoose.Schema({
       'Suknje',
       'Ženske pantalone',
       'Jakne i kaputi',
+      'Kravate',
+      'Čarape',
       'Aksesoari',
       'Cipele',
       'Torbe',
       'Ostalo'
     ]
   },
-    sizes: [{
+  sizes: [{
     size: {
       type: String,
-      enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size', '30','31', '32', '33', '34', '36', '38', '39', '40', '41', '42', '43', '44', '45', '46', '48', '50', '52', '54', '56']
+      enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size', '30', '31', '32', '33', '34', '36', '38', '39', '40', '41', '42', '43', '44', '45', '46', '48', '50', '52', '54', '56']
     },
     inStock: {
       type: Boolean,
