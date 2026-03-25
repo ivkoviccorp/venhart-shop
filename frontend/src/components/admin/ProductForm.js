@@ -30,7 +30,6 @@ const ProductForm = ({ product, onClose }) => {
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
-  // IZMENJENO: Dodate kategorije "Kravate" i "Čarape"
   const categories = [
     'Muška odela',
     'Muške košulje i natkošulje',
@@ -52,13 +51,13 @@ const ProductForm = ({ product, onClose }) => {
   ];
 
   const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size'];
-  const numericSizes = ['30','31', '32', '33', '34', '36', '38', '39', '40', '41', '42', '43', '44', '45', '46', '48', '50', '52', '54', '56'];
+  const numericSizes = ['30', '31', '32', '33', '34', '36', '38', '39', '40', '41', '42', '43', '44', '45', '46', '48', '50', '52', '54', '56'];
 
   useEffect(() => {
     if (product) {
       setFormData({
         name: product.name,
-        description: product.description,
+        description: product.description || '',
         price: product.price,
         oldPrice: product.oldPrice || '',
         category: product.category,
@@ -191,14 +190,13 @@ const ProductForm = ({ product, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>Opis *</label>
+              <label>Opis</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 rows="4"
                 placeholder="Detaljan opis proizvoda..."
-                required
               ></textarea>
             </div>
 
