@@ -34,6 +34,7 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Kategorija je obavezna'],
     enum: [
       'Muška odela',
+      'Muški sakoi',
       'Muške košulje i natkošulje',
       'Muške farmerke',
       'Muške pantalone',

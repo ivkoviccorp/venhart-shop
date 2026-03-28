@@ -15,6 +15,7 @@ const Shop = () => {
 
   const categories = [
     'Muška odela',
+    'Muški sakoi',
     'Muške košulje i natkošulje',
     'Muške farmerke',
     'Muške pantalone',
