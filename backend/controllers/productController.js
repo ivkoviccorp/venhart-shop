@@ -5,7 +5,7 @@ const { cloudinary } = require('../middleware/upload');
 // @route   GET /api/products
 exports.getProducts = async (req, res) => {
   try {
-    const { category, featured, onSale, search, sort, page = 1, limit = 12 } = req.query;
+    const { category, featured, onSale, search, sort, page = 1, limit = 100 } = req.query;
 
     let query = { active: true };
 
@@ -80,13 +80,11 @@ exports.createProduct = async (req, res) => {
   try {
     const { name, description, price, oldPrice, category, sizes, colors, featured, isNew, onSale } = req.body;
 
-    // Slike su uploadovane preko multer/cloudinary
     const images = req.files ? req.files.map(file => ({
       url: file.path,
       publicId: file.filename
     })) : [];
 
-    // Parse sizes i colors ako su stringovi
     let parsedSizes = sizes;
     let parsedColors = colors;
 
@@ -138,7 +136,6 @@ exports.updateProduct = async (req, res) => {
 
     const updateData = { ...req.body };
 
-    // Parse ako su stringovi
     if (typeof updateData.sizes === 'string') {
       updateData.sizes = JSON.parse(updateData.sizes);
     }
@@ -148,23 +145,19 @@ exports.updateProduct = async (req, res) => {
     if (updateData.price) updateData.price = parseFloat(updateData.price);
     if (updateData.oldPrice) updateData.oldPrice = parseFloat(updateData.oldPrice);
 
-    // Konvertuj boolean stringove
     ['featured', 'isNew', 'onSale', 'active'].forEach(field => {
       if (updateData[field] !== undefined) {
         updateData[field] = updateData[field] === 'true' || updateData[field] === true;
       }
     });
 
-    // Ako su uploadovane nove slike
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(file => ({
         url: file.path,
         publicId: file.filename
       }));
 
-      // Dodaj nove slike postojećim (ili zameni ako je poslat flag)
       if (updateData.replaceImages === 'true') {
-        // Obriši stare slike sa Cloudinary
         for (const img of product.images) {
           await cloudinary.uploader.destroy(img.publicId);
         }
@@ -206,10 +199,8 @@ exports.deleteProductImage = async (req, res) => {
       });
     }
 
-    // Obriši sa Cloudinary
     await cloudinary.uploader.destroy(req.params.publicId);
 
-    // Ukloni iz baze
     product.images = product.images.filter(img => img.publicId !== req.params.publicId);
     await product.save();
 
@@ -238,7 +229,6 @@ exports.deleteProduct = async (req, res) => {
       });
     }
 
-    // Obriši slike sa Cloudinary
     for (const img of product.images) {
       await cloudinary.uploader.destroy(img.publicId);
     }
