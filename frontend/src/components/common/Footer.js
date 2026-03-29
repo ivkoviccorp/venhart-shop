@@ -43,11 +43,28 @@ const Footer = () => {
 
         <div className="footer-section">
           <h4>Pratite nas</h4>
+
           <div className="footer-social">
-            <a href="https://www.instagram.com/venhart.store/" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.instagram.com/venhart.store/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram profil Venhart Concept Store"
+            >
               <FaInstagram size={28} />
             </a>
           </div>
+
+          <div className="footer-instagram-link">
+            <a
+              href="https://www.instagram.com/venhart.store/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @venhart.store
+            </a>
+          </div>
+
           <div className="footer-links">
             <Link to="/shop">Shop</Link>
             <Link to="/about">O nama</Link>
