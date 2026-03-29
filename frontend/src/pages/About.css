@@ -221,3 +221,29 @@
     grid-template-columns: 1fr;
   }
 }
+/* Google Map Section */
+.about-map-section {
+  margin-top: 70px;
+  text-align: center;
+}
+
+.about-map-section h3 {
+  font-size: 28px;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.about-map-section p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.about-map-wrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background: white;
+}

@@ -110,6 +110,24 @@ const About = () => {
               <p><strong>Nedelja:</strong> Zatvoreno</p>
             </div>
           </div>
+
+          {/* Google Map */}
+          <div className="about-map-section">
+            <h3>Pronađite nas</h3>
+            <p>Posetite naš butik na adresi Generala Ljubomira Milića 1, Beograd.</p>
+            <div className="about-map-wrapper">
+              <iframe
+                title="Venhart Concept Store Lokacija"
+                src="https://www.google.com/maps?q=Generala%20Ljubomira%20Milica%201%20Beograd&z=16&output=embed"
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </section>
     </div>
