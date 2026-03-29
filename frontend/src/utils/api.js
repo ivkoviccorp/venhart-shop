@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 const API_URL = 'https://venhart-backend-0gm6.onrender.com/api';
+
+console.log('API_URL:', API_URL);
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
