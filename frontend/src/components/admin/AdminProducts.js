@@ -16,19 +16,24 @@ const AdminProducts = () => {
   // Lista kategorija za filter
   const categories = [
     'Muška odela',
+    'Muški sakoi',
+    'Muški džemperi',
     'Muške košulje i natkošulje',
     'Muške farmerke',
     'Muške pantalone',
+    'Muške majice',
     'Ženska odela',
+    'Ženski sakoi',
     'Ženski kompleti',
+    'Ženski triko komplet',
     'Haljine',
     'Bluze',
     'Suknje',
     'Ženske pantalone',
     'Jakne i kaputi',
-    'Kravate',
+    'Muške kravate i aksesoari',
     'Čarape',
-    'Aksesoari',
+    
     'Cipele',
     'Torbe',
     'Ostalo'
