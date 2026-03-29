@@ -16,6 +16,7 @@
   left: 0;
   top: 0;
   z-index: 1000;
+  overflow-y: auto;
 }
 
 .admin-logo {
@@ -83,6 +84,7 @@
   font-size: 14px;
   transition: all 0.3s;
   cursor: pointer;
+  justify-content: center;
 }
 
 .admin-user .logout-btn:hover {
@@ -96,6 +98,8 @@
   margin-left: 280px;
   padding: 40px;
   overflow-y: auto;
+  width: calc(100% - 280px);
+  box-sizing: border-box;
 }
 
 .admin-page-title {
@@ -192,8 +196,6 @@
 .stat-icon.total { background-color: #3498db; }
 .stat-icon.accepted { background-color: #27ae60; }
 .stat-icon.revenue { background-color: var(--secondary-color); }
-
-/* NOVO - dodatne boje */
 .stat-icon.today-orders { background-color: #8e44ad; }
 .stat-icon.today-revenue { background-color: #16a085; }
 .stat-icon.week-orders { background-color: #e67e22; }
@@ -212,6 +214,7 @@
   font-weight: bold;
   color: var(--primary-color);
   line-height: 1.2;
+  word-break: break-word;
 }
 
 /* Recent Orders */
@@ -232,11 +235,13 @@
 
 .orders-table {
   overflow-x: auto;
+  width: 100%;
 }
 
 .orders-table table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 650px;
 }
 
 .orders-table th {
@@ -262,6 +267,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .status-badge.pending {
@@ -306,6 +312,7 @@
   font-size: 20px;
   color: var(--primary-color);
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 .settings-section > p {
@@ -375,6 +382,7 @@
   font-size: 16px;
   color: #c0392b;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .danger-info p {
@@ -445,6 +453,7 @@
   font-size: 16px;
   text-align: center;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
 .confirm-input input:focus {
@@ -452,32 +461,167 @@
   border-color: #c0392b;
 }
 
-/* Responsive */
-@media (max-width: 968px) {
+/* Tablet */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    width: 220px;
+  }
+
+  .admin-main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 24px;
+  }
+
+  .admin-logo h2 {
+    font-size: 26px;
+  }
+
+  .admin-nav-link {
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    display: block;
+  }
+
   .admin-sidebar {
     width: 100%;
     height: auto;
     position: relative;
+    min-height: auto;
+  }
+
+  .admin-logo {
+    padding: 24px 20px;
+  }
+
+  .admin-logo h2 {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+
+  .admin-nav {
+    padding: 15px 0;
+  }
+
+  .admin-nav-link {
+    padding: 14px 18px;
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  .admin-user {
+    padding: 20px;
   }
 
   .admin-main {
     margin-left: 0;
-    padding: 20px;
+    width: 100%;
+    padding: 18px 14px;
+    box-sizing: border-box;
+  }
+
+  .admin-page-title {
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 24px;
+    gap: 12px;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    padding: 20px 16px;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 14px;
+  }
+
+  .stat-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 22px;
+  }
+
+  .stat-number {
+    font-size: 24px;
+  }
+
+  .recent-orders {
+    padding: 18px 14px;
+  }
+
+  .recent-orders h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  .settings-section {
+    padding: 20px 16px;
+  }
+
+  .danger-action {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .btn-danger,
+  .btn-refresh {
+    width: 100%;
+    justify-content: center;
   }
 }
 
-@media (max-width: 768px) {
-  .danger-action {
-    flex-direction: column;
-    text-align: center;
+/* Small Mobile */
+@media (max-width: 480px) {
+  .admin-main {
+    padding: 14px 10px;
+  }
+
+  .admin-page-title {
+    font-size: 20px;
   }
 
   .stat-card {
     flex-direction: column;
     text-align: center;
+    padding: 18px 14px;
+  }
+
+  .stat-info h3 {
+    font-size: 12px;
+  }
+
+  .stat-number {
+    font-size: 22px;
+  }
+
+  .recent-orders,
+  .settings-section {
+    padding: 16px 12px;
+  }
+
+  .orders-table table {
+    min-width: 560px;
   }
 }
