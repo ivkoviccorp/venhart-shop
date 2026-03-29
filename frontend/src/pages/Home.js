@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
-import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
+import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 import './Home.css';
 
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
 
   const fetchFeaturedProducts = async () => {
     try {
-      const response = await productsAPI.getAll({ featured: true, limit: 36 });
+      const response = await productsAPI.getAll({ featured: true, limit: 12 });
       setFeaturedProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -84,10 +84,33 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Brand / Intro Section */}
+      <section className="brand-highlight">
+        <div className="container">
+          <div className="brand-highlight-content">
+            <span className="brand-highlight-tag">PAŽLJIVO ODABRANO</span>
+            <h2>Modni komadi koji ostavljaju utisak</h2>
+            <p>
+              U Venhart Concept Store-u biramo garderobu koja spaja savremen stil,
+              kvalitetnu izradu i elegantan izgled — za muškarce i žene koji žele da
+              se izdvoje sigurnim i sofisticiranim izborom.
+            </p>
+            <Link to="/shop" className="btn btn-dark">
+              Istraži ponudu <FiArrowRight />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Products */}
       <section className="featured-section">
         <div className="container">
-          <h2 className="section-title">Istaknuti Proizvodi</h2>
+          <div className="section-header">
+            <div>
+              <span className="section-tag">IZDVOJENO</span>
+              <h2 className="section-title">Istaknuti proizvodi</h2>
+            </div>
+          </div>
           
           {loading ? (
             <div className="loading">Učitavanje...</div>
@@ -124,6 +147,12 @@ const Home = () => {
           {featuredProducts.length === 0 && !loading && (
             <p className="no-products">Trenutno nema dostupnih proizvoda.</p>
           )}
+
+          <div className="featured-cta">
+            <Link to="/shop" className="btn btn-outline-dark">
+              Pogledaj sve proizvode <FiArrowRight />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -131,9 +160,11 @@ const Home = () => {
       <section className="about-preview">
         <div className="container">
           <div className="about-content">
+            <span className="section-tag">VENHART</span>
             <h2>O Nama</h2>
             <p>
-              Venhart Concept Store je moderan butik muške i ženske garderobe koji nudi pažljivo birane komade sa fokusom na kvalitet, eleganciju i savremen stil.
+              Venhart Concept Store je moderan butik muške i ženske garderobe koji nudi
+              pažljivo birane komade sa fokusom na kvalitet, eleganciju i savremen stil.
             </p>
             <Link to="/about" className="btn btn-outline">
               Saznaj više
