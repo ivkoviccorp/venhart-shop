@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
+import { FiTag } from 'react-icons/fi';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -59,6 +60,8 @@ const ProductDetail = () => {
     return <div className="loading">Proizvod nije pronađen</div>;
   }
 
+  const showTiePromo = product.category === 'Muška odela';
+
   return (
     <div className="product-detail">
       <div className="container">
@@ -100,6 +103,19 @@ const ProductDetail = () => {
               )}
               <span className="price">{product.price.toLocaleString()} RSD</span>
             </div>
+
+            {/* PROMO BANNER ZA MUŠKA ODELA */}
+            {showTiePromo && (
+              <div className="product-promo-banner">
+                <div className="promo-icon">
+                  <FiTag />
+                </div>
+                <div className="promo-text">
+                  <strong>Kravata 20% jeftinije uz kupovinu muškog odela</strong>
+                  <p>Iskoristite specijalnu ponudu i upotpunite elegantan izgled po povoljnijoj ceni.</p>
+                </div>
+              </div>
+            )}
 
             <div className="product-description">
               <p>{product.description}</p>

@@ -22,6 +22,7 @@
   background-color: var(--light-gray);
   margin-bottom: 20px;
   overflow: hidden;
+  border-radius: 12px;
 }
 
 .main-image img {
@@ -43,6 +44,7 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: border 0.3s;
+  border-radius: 6px;
 }
 
 .image-thumbnails img:hover,
@@ -73,7 +75,8 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
 .product-price-section .price {
@@ -86,6 +89,47 @@
   font-size: 24px;
   text-decoration: line-through;
   color: #999;
+}
+
+/* PROMO BANNER */
+.product-promo-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: linear-gradient(135deg, #fff8ef 0%, #f8efe1 100%);
+  border: 1px solid rgba(212, 165, 116, 0.35);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 20px rgba(212, 165, 116, 0.08);
+}
+
+.promo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.promo-text strong {
+  display: block;
+  font-size: 16px;
+  color: var(--primary-color);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.promo-text p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.7;
+  margin: 0;
 }
 
 .product-description {
@@ -125,6 +169,7 @@
   font-size: 14px;
   font-weight: 600;
   position: relative;
+  border-radius: 8px;
 }
 
 .size-btn:hover,
@@ -170,6 +215,8 @@
   gap: 0;
   width: fit-content;
   border: 2px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .quantity-selector button {
@@ -202,6 +249,7 @@
   padding: 18px;
   font-size: 16px;
   margin-top: 20px;
+  border-radius: 10px;
 }
 
 @media (max-width: 968px) {
@@ -221,5 +269,29 @@
 
   .product-details h1 {
     font-size: 28px;
+  }
+
+  .product-promo-banner {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-promo-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .promo-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .promo-text strong {
+    font-size: 15px;
+  }
+
+  .promo-text p {
+    font-size: 13px;
   }
 }
