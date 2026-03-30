@@ -9,18 +9,66 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   const categoryCards = [
-    { title: 'Muške farmerke', value: 'Muške farmerke' },
-    { title: 'Muška odela', value: 'Muška odela' },
-    { title: 'Ženske haljine i kompleti', value: 'Haljine' },
-    { title: 'Muški sakoi', value: 'Muški sakoi' },
-    { title: 'Muške košulje i natkošulje', value: 'Muške košulje i natkošulje' },
-    { title: 'Ženska odela', value: 'Ženska odela' },
-    { title: 'Muški džemperi', value: 'Muški džemperi' },
-    { title: 'Ženski triko kompleti', value: 'Ženski triko kompleti' },
-    { title: 'Ženski sakoi', value: 'Ženski sakoi' },
-    { title: 'Muške kravate i aksesoari', value: 'Muške kravate i aksesoari' },
-    { title: 'Muške majice', value: 'Muške majice' },
-    { title: 'Ženske pantalone', value: 'Ženske pantalone' }
+    {
+      title: 'Muške farmerke',
+      value: 'Muške farmerke',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774377063/venhart-shop/nidachoiukzlnhvewiv6.jpg'
+    },
+    {
+      title: 'Muška odela',
+      value: 'Muška odela',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774376054/venhart-shop/kukeneqoxtikvmnkkg5q.webp'
+    },
+    {
+      title: 'Ženske haljine i kompleti',
+      value: 'Haljine',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp'
+    },
+    {
+      title: 'Muški sakoi',
+      value: 'Muški sakoi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731575/venhart-shop/sxa0knrny8zer9vxcqzq.webp'
+    },
+    {
+      title: 'Muške košulje i natkošulje',
+      value: 'Muške košulje i natkošulje',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731962/venhart-shop/g07vkjvmghyaltjjzusi.webp'
+    },
+    {
+      title: 'Ženska odela',
+      value: 'Ženska odela',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774732113/venhart-shop/wurngrwyckcxrk3jwdra.webp'
+    },
+    {
+      title: 'Muški džemperi',
+      value: 'Muški džemperi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733423/venhart-shop/ma8wdz0hvi5jnjfgcxwx.webp'
+    },
+    {
+      title: 'Ženski triko kompleti',
+      value: 'Ženski triko komplet',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733759/venhart-shop/muoyh2ivw25sum1xihwc.webp'
+    },
+    {
+      title: 'Ženski sakoi',
+      value: 'Ženski sakoi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733882/venhart-shop/xevqjnnwvuhjjqrkgnza.jpg'
+    },
+    {
+      title: 'Muške kravate i aksesoari',
+      value: 'Muške kravate i aksesoari',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734343/venhart-shop/ndjujdf8oe9xplipywnq.webp'
+    },
+    {
+      title: 'Muške majice',
+      value: 'Muške majice',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734460/venhart-shop/swxkhappel1anocyrxki.webp'
+    },
+    {
+      title: 'Ženske pantalone',
+      value: 'Ženske pantalone',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774904028/venhart-shop/dlu5ogf02asslywv4kee.webp'
+    }
   ];
 
   useEffect(() => {
@@ -133,6 +181,11 @@ const Home = () => {
                 key={category.value}
                 to={`/shop?category=${encodeURIComponent(category.value)}`}
                 className="category-card"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url(${category.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
               >
                 <div className="category-card-overlay">
                   <h3>{category.title}</h3>
