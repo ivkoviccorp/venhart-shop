@@ -1,6 +1,7 @@
 const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = 'Venhart Concept Store <orders@venhartstore.rs>';
 
 // Email kupcu - porudžbina primljena
 exports.sendOrderConfirmation = async (order) => {
@@ -57,7 +58,7 @@ exports.sendOrderConfirmation = async (order) => {
   `;
 
   await resend.emails.send({
-    from: 'Venhart Concept Store <onboarding@resend.dev>',
+    from: FROM_EMAIL,
     to: order.customer.email,
     subject: `Potvrda porudžbine #${order.orderNumber} - Venhart`,
     html
@@ -90,7 +91,7 @@ exports.sendAdminNotification = async (order) => {
   `;
 
   await resend.emails.send({
-    from: 'Venhart Shop <onboarding@resend.dev>',
+    from: FROM_EMAIL,
     to: process.env.ADMIN_EMAIL,
     subject: `🔔 Nova porudžbina #${order.orderNumber}`,
     html
@@ -147,7 +148,7 @@ exports.sendOrderAccepted = async (order) => {
   `;
 
   await resend.emails.send({
-    from: 'Venhart Concept Store <onboarding@resend.dev>',
+    from: FROM_EMAIL,
     to: order.customer.email,
     subject: `✅ Porudžbina #${order.orderNumber} odobrena - Venhart`,
     html
@@ -187,7 +188,7 @@ exports.sendOrderRejected = async (order) => {
   `;
 
   await resend.emails.send({
-    from: 'Venhart Concept Store <onboarding@resend.dev>',
+    from: FROM_EMAIL,
     to: order.customer.email,
     subject: `Porudžbina #${order.orderNumber} - Venhart`,
     html
