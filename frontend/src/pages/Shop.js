@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { FiSearch } from 'react-icons/fi';
 import './Shop.css';
 
 const Shop = () => {
+  const [searchParams] = useSearchParams();
+  const categoryFromUrl = searchParams.get('category') || '';
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    category: '',
+    category: categoryFromUrl,
     search: '',
     sort: 'newest',
   });
@@ -32,11 +35,18 @@ const Shop = () => {
     'Jakne i kaputi',
     'Muške kravate i aksesoari',
     'Čarape',
-    
     'Cipele',
     'Torbe',
     'Ostalo'
   ];
+
+  useEffect(() => {
+    const categoryParam = searchParams.get('category') || '';
+    setFilters((prev) => ({
+      ...prev,
+      category: categoryParam
+    }));
+  }, [searchParams]);
 
   useEffect(() => {
     fetchProducts();
