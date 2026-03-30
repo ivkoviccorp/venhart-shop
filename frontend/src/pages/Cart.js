@@ -1,11 +1,21 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { FiTrash2, FiShoppingBag } from 'react-icons/fi';
+import { FiTrash2, FiShoppingBag, FiTag } from 'react-icons/fi';
 import './Cart.css';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, getTotalPrice, getTotalItems } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getTotalPrice,
+    getSubtotalPrice,
+    getTotalItems,
+    getTieDiscount,
+    getDiscountedTieCount
+  } = useCart();
+
   const navigate = useNavigate();
 
   if (cartItems.length === 0) {
@@ -90,8 +100,25 @@ const Cart = () => {
 
             <div className="summary-row">
               <span>Međuzbir:</span>
-              <span>{getTotalPrice().toLocaleString()} RSD</span>
+              <span>{getSubtotalPrice().toLocaleString()} RSD</span>
             </div>
+
+            {getTieDiscount() > 0 && (
+              <>
+                <div className="cart-discount-info">
+                  <FiTag />
+                  <span>
+                    Akcija: uz muško odelo kravata je 20% jeftinija
+                    {getDiscountedTieCount() > 0 && ` (${getDiscountedTieCount()} kom)`}
+                  </span>
+                </div>
+
+                <div className="summary-row discount">
+                  <span>Popust na kravatu:</span>
+                  <span>- {getTieDiscount().toLocaleString()} RSD</span>
+                </div>
+              </>
+            )}
 
             <div className="summary-row total">
               <span>Ukupno:</span>
