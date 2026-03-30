@@ -8,6 +8,21 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const categoryCards = [
+    { title: 'Muške farmerke', value: 'Muške farmerke' },
+    { title: 'Muška odela', value: 'Muška odela' },
+    { title: 'Ženske haljine i kompleti', value: 'Haljine' },
+    { title: 'Muški sakoi', value: 'Muški sakoi' },
+    { title: 'Muške košulje i natkošulje', value: 'Muške košulje i natkošulje' },
+    { title: 'Ženska odela', value: 'Ženska odela' },
+    { title: 'Muški džemperi', value: 'Muški džemperi' },
+    { title: 'Ženski triko kompleti', value: 'Ženski triko kompleti' },
+    { title: 'Ženski sakoi', value: 'Ženski sakoi' },
+    { title: 'Muške kravate i aksesoari', value: 'Muške kravate i aksesoari' },
+    { title: 'Muške majice', value: 'Muške majice' },
+    { title: 'Ženske pantalone', value: 'Ženske pantalone' }
+  ];
+
   useEffect(() => {
     fetchFeaturedProducts();
   }, []);
@@ -98,6 +113,35 @@ const Home = () => {
             <Link to="/shop" className="btn btn-dark">
               Istraži ponudu <FiArrowRight />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Cards */}
+      <section className="home-categories">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <span className="section-tag">KATEGORIJE</span>
+              <h2 className="section-title">Istraži po kategorijama</h2>
+            </div>
+          </div>
+
+          <div className="category-grid">
+            {categoryCards.map((category) => (
+              <Link
+                key={category.value}
+                to={`/shop?category=${encodeURIComponent(category.value)}`}
+                className="category-card"
+              >
+                <div className="category-card-overlay">
+                  <h3>{category.title}</h3>
+                  <span>
+                    Pogledaj ponudu <FiArrowRight />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

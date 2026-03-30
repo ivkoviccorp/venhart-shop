@@ -186,10 +186,10 @@
   transform: translateY(-2px);
 }
 
-/* Featured Section */
-.featured-section {
+/* Category Section */
+.home-categories {
   padding: 90px 0;
-  background-color: var(--bg-color);
+  background: linear-gradient(180deg, #ffffff 0%, #f7f3eb 100%);
 }
 
 .section-header {
@@ -217,6 +217,80 @@
   text-transform: uppercase;
   margin-bottom: 0;
   color: var(--primary-color);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.category-card {
+  min-height: 180px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  background: rgba(212, 165, 116, 0.12);
+  border-radius: 50%;
+}
+
+.category-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  width: 90px;
+  height: 90px;
+  background: rgba(212, 165, 116, 0.08);
+  border-radius: 50%;
+}
+
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.14);
+}
+
+.category-card-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.category-card h3 {
+  font-size: 20px;
+  line-height: 1.35;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.category-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+/* Featured Section */
+.featured-section {
+  padding: 90px 0;
+  background-color: var(--bg-color);
 }
 
 .products-grid {
@@ -429,6 +503,20 @@
   .section-title,
   .about-content h2 {
     font-size: 28px;
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .category-card {
+    min-height: 150px;
+    padding: 20px;
+  }
+
+  .category-card h3 {
+    font-size: 18px;
   }
 
   .products-grid {
