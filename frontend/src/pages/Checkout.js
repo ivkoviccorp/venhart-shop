@@ -3,12 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ordersAPI } from '../utils/api';
 import { toast } from 'react-toastify';
-import { FiMapPin, FiTruck, FiGift } from 'react-icons/fi';
+import { FiMapPin, FiTruck, FiGift, FiTag } from 'react-icons/fi';
 import './Checkout.css';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const {
+    cartItems,
+    getTotalPrice,
+    getSubtotalPrice,
+    getTieDiscount,
+    getDiscountedTieCount,
+    getSuitCount,
+    clearCart
+  } = useCart();
   
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [giftWrap, setGiftWrap] = useState(false);
@@ -25,13 +33,51 @@ const Checkout = () => {
     note: '',
   });
 
-  // IZMENJENO: Dostava je sada besplatna
   const shippingCost = 0;
   const giftWrapCost = giftWrap ? 200 : 0;
   const totalAmount = getTotalPrice() + shippingCost + giftWrapCost;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Izračunaj popust za pojedinačne artikle (kravate)
+  const getDiscountedItemsForOrder = () => {
+    let discountedTieCountLeft = getDiscountedTieCount();
+
+    return cartItems.map((item) => {
+      const isTie = item.product.category === 'Muške kravate i aksesoari';
+
+      if (isTie && discountedTieCountLeft > 0) {
+        const discountedQty = Math.min(item.quantity, discountedTieCountLeft);
+        discountedTieCountLeft -= discountedQty;
+
+        const discountedPrice = item.product.price * 0.8; // 20% popusta
+
+        return {
+          product: item.product._id,
+          name: item.product.name,
+          price: discountedPrice,
+          originalPrice: item.product.price,
+          size: item.size,
+          color: item.color,
+          quantity: item.quantity,
+          image: item.product.images[0]?.url,
+          hasDiscount: true
+        };
+      }
+
+      return {
+        product: item.product._id,
+        name: item.product.name,
+        price: item.product.price,
+        size: item.size,
+        color: item.color,
+        quantity: item.quantity,
+        image: item.product.images[0]?.url,
+        hasDiscount: false
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -52,15 +98,7 @@ const Checkout = () => {
           email: formData.email,
           phone: formData.phone,
         },
-        items: cartItems.map((item) => ({
-          product: item.product._id,
-          name: item.product.name,
-          price: item.product.price,
-          size: item.size,
-          color: item.color,
-          quantity: item.quantity,
-          image: item.product.images[0]?.url,
-        })),
+        items: getDiscountedItemsForOrder(),
         deliveryMethod,
         shippingAddress: deliveryMethod === 'delivery' ? {
           street: formData.street,
@@ -73,7 +111,7 @@ const Checkout = () => {
         giftWrap,
       };
 
-      const response = await ordersAPI.create(orderData);
+      await ordersAPI.create(orderData);
       
       toast.success('Porudžbina uspešno poslata! Proverite email.');
       clearCart();
@@ -195,14 +233,13 @@ const Checkout = () => {
                     </div>
                     <div className="option-content">
                       <strong>Dostava brzom poštom</strong>
-                      
                       <p className="option-note">Isporuka u roku od 2-4 radna dana na teritoriji Srbije</p>
                     </div>
                   </label>
                 </div>
               </div>
 
-              {/* Shipping Address (if delivery) */}
+              {/* Shipping Address */}
               {deliveryMethod === 'delivery' && (
                 <div className="form-section">
                   <h3>Adresa dostave</h3>
@@ -302,13 +339,25 @@ const Checkout = () => {
               <div className="summary-totals">
                 <div className="summary-row">
                   <span>Međuzbir:</span>
-                  <span>{getTotalPrice().toLocaleString()} RSD</span>
+                  <span>{getSubtotalPrice().toLocaleString()} RSD</span>
                 </div>
 
-                <div className="summary-row">
-                  
-                  
-                </div>
+                {getTieDiscount() > 0 && (
+                  <>
+                    <div className="summary-discount-note">
+                      <FiTag />
+                      <span>
+                        Akcija: kravata 20% jeftinije uz muško odelo
+                        {getDiscountedTieCount() > 0 && ` (${getDiscountedTieCount()} kom)`}
+                      </span>
+                    </div>
+
+                    <div className="summary-row discount">
+                      <span>Popust na kravatu:</span>
+                      <span>- {getTieDiscount().toLocaleString()} RSD</span>
+                    </div>
+                  </>
+                )}
 
                 {giftWrap && (
                   <div className="summary-row gift-row">
