@@ -26,11 +26,13 @@ const ProductDetail = () => {
     try {
       const response = await productsAPI.getById(id);
       setProduct(response.data.product);
-      
-      // Auto-select first available size and color
-      if (response.data.product.sizes?.length > 0) {
-        setSelectedSize(response.data.product.sizes[0].size);
+
+      // Auto-select first size that has stock
+      const firstAvailableSize = response.data.product.sizes?.find((s) => s.stock > 0);
+      if (firstAvailableSize) {
+        setSelectedSize(firstAvailableSize.size);
       }
+
       if (response.data.product.colors?.length > 0) {
         setSelectedColor(response.data.product.colors[0].name);
       }
@@ -43,13 +45,32 @@ const ProductDetail = () => {
     }
   };
 
+  const selectedSizeObj = product?.sizes?.find((s) => s.size === selectedSize);
+  const selectedSizeStock = selectedSizeObj ? selectedSizeObj.stock : 0;
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.warning('Molimo izaberite veličinu');
       return;
     }
 
+    if (selectedSizeStock < 1) {
+      toast.warning('Izabrana veličina nije dostupna');
+      return;
+    }
+
+    if (quantity > selectedSizeStock) {
+      toast.warning(`Na stanju je samo ${selectedSizeStock} kom za ovu veličinu`);
+      return;
+    }
+
     addToCart(product, selectedSize, selectedColor, quantity);
+  };
+
+  const handleQuantityChange = (value) => {
+    const parsed = Math.max(1, parseInt(value) || 1);
+    const limited = selectedSizeStock > 0 ? Math.min(parsed, selectedSizeStock) : 1;
+    setQuantity(limited);
   };
 
   if (loading) {
@@ -117,9 +138,11 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="product-description">
-              <p>{product.description}</p>
-            </div>
+            {product.description && (
+              <div className="product-description">
+                <p>{product.description}</p>
+              </div>
+            )}
 
             {/* Sizes */}
             {product.sizes && product.sizes.length > 0 && (
@@ -129,15 +152,26 @@ const ProductDetail = () => {
                   {product.sizes.map((sizeObj) => (
                     <button
                       key={sizeObj.size}
-                      className={`size-btn ${selectedSize === sizeObj.size ? 'active' : ''} ${!sizeObj.inStock ? 'disabled' : ''}`}
-                      onClick={() => sizeObj.inStock && setSelectedSize(sizeObj.size)}
-                      disabled={!sizeObj.inStock}
+                      className={`size-btn ${selectedSize === sizeObj.size ? 'active' : ''} ${sizeObj.stock < 1 ? 'disabled' : ''}`}
+                      onClick={() => {
+                        if (sizeObj.stock > 0) {
+                          setSelectedSize(sizeObj.size);
+                          setQuantity(1);
+                        }
+                      }}
+                      disabled={sizeObj.stock < 1}
                     >
                       {sizeObj.size}
-                      {!sizeObj.inStock && <span className="out-of-stock">Nema na stanju</span>}
+                      {sizeObj.stock < 1 && <span className="out-of-stock">Rasprodato</span>}
                     </button>
                   ))}
                 </div>
+
+                {selectedSize && selectedSizeObj && (
+                  <p className="size-stock-info">
+                    Na stanju za veličinu <strong>{selectedSize}</strong>: {selectedSizeObj.stock} kom
+                  </p>
+                )}
               </div>
             )}
 
@@ -171,20 +205,35 @@ const ProductDetail = () => {
             <div className="product-options">
               <label>Količina:</label>
               <div className="quantity-selector">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
                 <input
                   type="number"
                   value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  onChange={(e) => handleQuantityChange(e.target.value)}
                   min="1"
+                  max={selectedSizeStock || 1}
                 />
-                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                <button
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  disabled={selectedSizeStock > 0 ? quantity >= selectedSizeStock : true}
+                >
+                  +
+                </button>
               </div>
             </div>
 
             {/* Add to Cart */}
-            <button className="btn btn-add-to-cart" onClick={handleAddToCart}>
-              Dodaj u korpu
+            <button
+              className="btn btn-add-to-cart"
+              onClick={handleAddToCart}
+              disabled={selectedSizeStock < 1}
+            >
+              {selectedSizeStock < 1 ? 'Nema na stanju' : 'Dodaj u korpu'}
             </button>
           </div>
         </div>
