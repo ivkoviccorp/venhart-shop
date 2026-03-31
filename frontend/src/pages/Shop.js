@@ -13,6 +13,7 @@ const Shop = () => {
   const [filters, setFilters] = useState({
     category: categoryFromUrl,
     search: '',
+    gender: '',
     sort: 'newest',
   });
 
@@ -107,6 +108,15 @@ const Shop = () => {
     setFilters({ ...filters, [key]: value });
   };
 
+  const resetFilters = () => {
+    setFilters({
+      category: '',
+      search: '',
+      gender: '',
+      sort: 'newest',
+    });
+  };
+
   const showSuitPromo =
     filters.category === 'Muška odela' ||
     products.some((product) => product.category === 'Muška odela');
@@ -165,6 +175,17 @@ const Shop = () => {
           </select>
 
           <select
+            value={filters.gender}
+            onChange={(e) => handleFilterChange('gender', e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Svi proizvodi</option>
+            <option value="Muški">Muški</option>
+            <option value="Ženski">Ženski</option>
+            <option value="Unisex">Unisex</option>
+          </select>
+
+          <select
             value={filters.sort}
             onChange={(e) => handleFilterChange('sort', e.target.value)}
             className="filter-select"
@@ -174,6 +195,12 @@ const Shop = () => {
             <option value="price_desc">Cena: Opadajuće</option>
             <option value="name">Ime: A-Z</option>
           </select>
+        </div>
+
+        <div className="shop-actions">
+          <button className="reset-filters-btn" onClick={resetFilters}>
+            Prikaži sve proizvode
+          </button>
         </div>
 
         {showSuitPromo && (
@@ -193,6 +220,7 @@ const Shop = () => {
           <>
             <div className="products-count">
               {filters.category ? `Kategorija: ${filters.category} • ` : ''}
+              {filters.gender ? `Pol: ${filters.gender} • ` : ''}
               Pronađeno: {products.length} proizvoda
             </div>
 

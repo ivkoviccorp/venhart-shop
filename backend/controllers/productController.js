@@ -5,13 +5,24 @@ const { cloudinary } = require('../middleware/upload');
 // @route   GET /api/products
 exports.getProducts = async (req, res) => {
   try {
-    const { category, featured, onSale, search, sort, page = 1, limit = 100 } = req.query;
+    const {
+      category,
+      gender,
+      featured,
+      onSale,
+      search,
+      sort,
+      page = 1,
+      limit = 100
+    } = req.query;
 
     let query = { active: true };
 
     if (category) query.category = category;
+    if (gender) query.gender = gender;
     if (featured) query.featured = featured === 'true';
     if (onSale) query.onSale = onSale === 'true';
+
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
@@ -78,7 +89,19 @@ exports.getProduct = async (req, res) => {
 // @route   POST /api/products
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, price, oldPrice, category, sizes, colors, featured, isNew, onSale } = req.body;
+    const {
+      name,
+      description,
+      price,
+      oldPrice,
+      category,
+      sizes,
+      colors,
+      featured,
+      isNew,
+      onSale,
+      gender
+    } = req.body;
 
     const images = req.files ? req.files.map(file => ({
       url: file.path,
@@ -104,6 +127,7 @@ exports.createProduct = async (req, res) => {
       category,
       sizes: parsedSizes,
       colors: parsedColors,
+      gender,
       featured: featured === 'true' || featured === true,
       isNew: isNew === 'true' || isNew === true,
       onSale: onSale === 'true' || onSale === true
