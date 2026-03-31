@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 const { sendOrderConfirmation, sendAdminNotification, sendOrderAccepted, sendOrderRejected } = require('../utils/sendEmail');
 
 // @desc    Create new order
@@ -10,8 +11,40 @@ exports.createOrder = async (req, res) => {
     
     const { customer, items, deliveryMethod, shippingAddress, shippingCost, totalAmount, giftWrap } = req.body;
 
+    console.log('Provera zaliha...');
+
+    // Provera zaliha za sve proizvode i veličine
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: `Proizvod nije pronađen: ${item.name}`
+        });
+      }
+
+      if (item.size) {
+        const sizeObj = product.sizes.find((s) => s.size === item.size);
+
+        if (!sizeObj) {
+          return res.status(400).json({
+            success: false,
+            message: `Veličina ${item.size} nije dostupna za proizvod ${item.name}`
+          });
+        }
+
+        if (sizeObj.stock < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Na stanju je samo ${sizeObj.stock} kom za ${item.name} (${item.size})`
+          });
+        }
+      }
+    }
+
     console.log('Kreiranje porudžbine...');
-    
+
     const order = await Order.create({
       customer,
       items,
@@ -23,6 +56,19 @@ exports.createOrder = async (req, res) => {
     });
 
     console.log('Porudžbina kreirana:', order.orderNumber);
+
+    // Smanji stanje po veličini
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+
+      if (product && item.size) {
+        const sizeObj = product.sizes.find((s) => s.size === item.size);
+        if (sizeObj) {
+          sizeObj.stock = Math.max(0, sizeObj.stock - item.quantity);
+        }
+        await product.save();
+      }
+    }
 
     // Pošalji emailove
     try {
@@ -207,7 +253,6 @@ exports.getDashboardStats = async (req, res) => {
 
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
 
-    // DANAS
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
@@ -235,9 +280,8 @@ exports.getDashboardStats = async (req, res) => {
 
     const revenueToday = revenueTodayResult.length > 0 ? revenueTodayResult[0].total : 0;
 
-    // OVE NEDELJE
     const now = new Date();
-    const day = now.getDay(); // 0 = Sunday
+    const day = now.getDay();
     const diffToMonday = day === 0 ? 6 : day - 1;
 
     const weekStart = new Date(now);
