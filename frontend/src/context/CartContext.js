@@ -27,6 +27,11 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('venhartCart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const getAvailableStockForSize = (product, size) => {
+    const sizeObj = product?.sizes?.find((s) => s.size === size);
+    return sizeObj ? sizeObj.stock : 0;
+  };
+
   const addToCart = (product, size, color, quantity = 1) => {
     const existingItemIndex = cartItems.findIndex(
       (item) =>
@@ -35,12 +40,31 @@ export const CartProvider = ({ children }) => {
         item.color === color
     );
 
+    const availableStock = getAvailableStockForSize(product, size);
+
+    if (availableStock < 1) {
+      toast.warning('Ova veličina nije dostupna');
+      return;
+    }
+
     if (existingItemIndex > -1) {
       const updatedCart = [...cartItems];
-      updatedCart[existingItemIndex].quantity += quantity;
+      const newQuantity = updatedCart[existingItemIndex].quantity + quantity;
+
+      if (newQuantity > availableStock) {
+        toast.warning(`Na stanju je samo ${availableStock} kom za veličinu ${size}`);
+        return;
+      }
+
+      updatedCart[existingItemIndex].quantity = newQuantity;
       setCartItems(updatedCart);
       toast.success('Količina ažurirana u korpi');
     } else {
+      if (quantity > availableStock) {
+        toast.warning(`Na stanju je samo ${availableStock} kom za veličinu ${size}`);
+        return;
+      }
+
       setCartItems([
         ...cartItems,
         {
@@ -62,6 +86,15 @@ export const CartProvider = ({ children }) => {
 
   const updateQuantity = (index, quantity) => {
     if (quantity < 1) return;
+
+    const item = cartItems[index];
+    const availableStock = getAvailableStockForSize(item.product, item.size);
+
+    if (quantity > availableStock) {
+      toast.warning(`Na stanju je samo ${availableStock} kom za veličinu ${item.size}`);
+      return;
+    }
+
     const updatedCart = [...cartItems];
     updatedCart[index].quantity = quantity;
     setCartItems(updatedCart);
@@ -141,6 +174,7 @@ export const CartProvider = ({ children }) => {
     getTieCount,
     getDiscountedTieCount,
     getTieDiscount,
+    getAvailableStockForSize,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
