@@ -19,9 +19,9 @@ const ProductForm = ({ product, onClose }) => {
   });
 
   const [sizes, setSizes] = useState([
-    { size: 'M', inStock: true },
-    { size: 'L', inStock: true },
-    { size: 'XL', inStock: true },
+    { size: 'M', stock: 0 },
+    { size: 'L', stock: 0 },
+    { size: 'XL', stock: 0 },
   ]);
 
   const [colors, setColors] = useState([]);
@@ -49,7 +49,6 @@ const ProductForm = ({ product, onClose }) => {
     'Jakne i kaputi',
     'Muške kravate i aksesoari',
     'Čarape',
-    
     'Cipele',
     'Torbe',
     'Ostalo'
@@ -90,13 +89,13 @@ const ProductForm = ({ product, onClose }) => {
     if (exists) {
       setSizes(sizes.filter(s => s.size !== size));
     } else {
-      setSizes([...sizes, { size, inStock: true }]);
+      setSizes([...sizes, { size, stock: 0 }]);
     }
   };
 
-  const toggleSizeStock = (size) => {
-    setSizes(sizes.map(s => 
-      s.size === size ? { ...s, inStock: !s.inStock } : s
+  const updateSizeStock = (size, stockValue) => {
+    setSizes(sizes.map(s =>
+      s.size === size ? { ...s, stock: Math.max(0, parseInt(stockValue) || 0) } : s
     ));
   };
 
@@ -138,7 +137,7 @@ const ProductForm = ({ product, onClose }) => {
 
     try {
       const data = new FormData();
-      
+
       Object.keys(formData).forEach(key => {
         data.append(key, formData[key]);
       });
@@ -267,7 +266,7 @@ const ProductForm = ({ product, onClose }) => {
               {availableSizes.map((size) => {
                 const sizeObj = sizes.find(s => s.size === size);
                 const isSelected = !!sizeObj;
-                
+
                 return (
                   <div key={size} className="size-item">
                     <label className={`size-checkbox ${isSelected ? 'selected' : ''}`}>
@@ -278,14 +277,16 @@ const ProductForm = ({ product, onClose }) => {
                       />
                       <span>{size}</span>
                     </label>
+
                     {isSelected && (
-                      <button
-                        type="button"
-                        className={`stock-toggle ${sizeObj.inStock ? 'in-stock' : 'out-of-stock'}`}
-                        onClick={() => toggleSizeStock(size)}
-                      >
-                        {sizeObj.inStock ? 'Na stanju' : 'Nema'}
-                      </button>
+                      <input
+                        type="number"
+                        min="0"
+                        value={sizeObj.stock}
+                        onChange={(e) => updateSizeStock(size, e.target.value)}
+                        placeholder="Komada"
+                        className="size-stock-input"
+                      />
                     )}
                   </div>
                 );
@@ -297,7 +298,7 @@ const ProductForm = ({ product, onClose }) => {
               {numericSizes.map((size) => {
                 const sizeObj = sizes.find(s => s.size === size);
                 const isSelected = !!sizeObj;
-                
+
                 return (
                   <div key={size} className="size-item">
                     <label className={`size-checkbox ${isSelected ? 'selected' : ''}`}>
@@ -308,14 +309,16 @@ const ProductForm = ({ product, onClose }) => {
                       />
                       <span>{size}</span>
                     </label>
+
                     {isSelected && (
-                      <button
-                        type="button"
-                        className={`stock-toggle ${sizeObj.inStock ? 'in-stock' : 'out-of-stock'}`}
-                        onClick={() => toggleSizeStock(size)}
-                      >
-                        {sizeObj.inStock ? 'Na stanju' : 'Nema'}
-                      </button>
+                      <input
+                        type="number"
+                        min="0"
+                        value={sizeObj.stock}
+                        onChange={(e) => updateSizeStock(size, e.target.value)}
+                        placeholder="Komada"
+                        className="size-stock-input"
+                      />
                     )}
                   </div>
                 );

@@ -34,27 +34,26 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Kategorija je obavezna'],
     enum: [
       'Muška odela',
-    'Muški sakoi',
-    'Muški džemperi',
-    'Muške košulje i natkošulje',
-    'Muške farmerke',
-    'Muške pantalone',
-    'Muške majice',
-    'Ženska odela',
-    'Ženski sakoi',
-    'Ženski kompleti',
-    'Ženski triko komplet',
-    'Haljine',
-    'Bluze',
-    'Suknje',
-    'Ženske pantalone',
-    'Jakne i kaputi',
-    'Muške kravate i aksesoari',
-    'Čarape',
-    
-    'Cipele',
-    'Torbe',
-    'Ostalo'
+      'Muški sakoi',
+      'Muški džemperi',
+      'Muške košulje i natkošulje',
+      'Muške farmerke',
+      'Muške pantalone',
+      'Muške majice',
+      'Ženska odela',
+      'Ženski sakoi',
+      'Ženski kompleti',
+      'Ženski triko komplet',
+      'Haljine',
+      'Bluze',
+      'Suknje',
+      'Ženske pantalone',
+      'Jakne i kaputi',
+      'Muške kravate i aksesoari',
+      'Čarape',
+      'Cipele',
+      'Torbe',
+      'Ostalo'
     ]
   },
   sizes: [{
@@ -62,9 +61,10 @@ const productSchema = new mongoose.Schema({
       type: String,
       enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size', '30', '31', '32', '33', '34', '36', '38', '39', '40', '41', '42', '43', '44', '45', '46', '48', '50', '52', '54', '56']
     },
-    inStock: {
-      type: Boolean,
-      default: true
+    stock: {
+      type: Number,
+      default: 0,
+      min: 0
     }
   }],
   colors: [{
