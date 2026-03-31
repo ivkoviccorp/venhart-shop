@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiArrowRight } from 'react-icons/fi';
 import './Shop.css';
 
 const Shop = () => {
@@ -16,28 +16,67 @@ const Shop = () => {
     sort: 'newest',
   });
 
-  const categories = [
-    'Muška odela',
-    'Muški sakoi',
-    'Muški džemperi',
-    'Muške košulje i natkošulje',
-    'Muške farmerke',
-    'Muške pantalone',
-    'Muške majice',
-    'Ženska odela',
-    'Ženski sakoi',
-    'Ženski kompleti',
-    'Ženski triko komplet',
-    'Haljine',
-    'Bluze',
-    'Suknje',
-    'Ženske pantalone',
-    'Jakne i kaputi',
-    'Muške kravate i aksesoari',
-    'Čarape',
-    'Cipele',
-    'Torbe',
-    'Ostalo'
+  const categoryCards = [
+    {
+      title: 'Muške farmerke',
+      value: 'Muške farmerke',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774377063/venhart-shop/nidachoiukzlnhvewiv6.jpg'
+    },
+    {
+      title: 'Muška odela',
+      value: 'Muška odela',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774376054/venhart-shop/kukeneqoxtikvmnkkg5q.webp'
+    },
+    {
+      title: 'Ženske haljine i kompleti',
+      value: 'Haljine',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp'
+    },
+    {
+      title: 'Muški sakoi',
+      value: 'Muški sakoi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731575/venhart-shop/sxa0knrny8zer9vxcqzq.webp'
+    },
+    {
+      title: 'Muške košulje i natkošulje',
+      value: 'Muške košulje i natkošulje',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731962/venhart-shop/g07vkjvmghyaltjjzusi.webp'
+    },
+    {
+      title: 'Ženska odela',
+      value: 'Ženska odela',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774732113/venhart-shop/wurngrwyckcxrk3jwdra.webp'
+    },
+    {
+      title: 'Muški džemperi',
+      value: 'Muški džemperi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733423/venhart-shop/ma8wdz0hvi5jnjfgcxwx.webp'
+    },
+    {
+      title: 'Ženski triko kompleti',
+      value: 'Ženski triko komplet',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733759/venhart-shop/muoyh2ivw25sum1xihwc.webp'
+    },
+    {
+      title: 'Ženski sakoi',
+      value: 'Ženski sakoi',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733882/venhart-shop/xevqjnnwvuhjjqrkgnza.jpg'
+    },
+    {
+      title: 'Muške kravate i aksesoari',
+      value: 'Muške kravate i aksesoari',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734343/venhart-shop/ndjujdf8oe9xplipywnq.webp'
+    },
+    {
+      title: 'Muške majice',
+      value: 'Muške majice',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734460/venhart-shop/swxkhappel1anocyrxki.webp'
+    },
+    {
+      title: 'Ženske pantalone',
+      value: 'Ženske pantalone',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774904028/venhart-shop/dlu5ogf02asslywv4kee.webp'
+    }
   ];
 
   useEffect(() => {
@@ -77,9 +116,33 @@ const Shop = () => {
       <div className="container">
         <h1 className="page-title">Shop</h1>
 
+        {/* Category Cards */}
+        <section className="shop-categories-section">
+          <div className="category-grid">
+            {categoryCards.map((category) => (
+              <button
+                key={category.value}
+                className={`category-card shop-category-card ${filters.category === category.value ? 'active' : ''}`}
+                onClick={() => handleFilterChange('category', category.value)}
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url(${category.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <div className="category-card-overlay">
+                  <h3>{category.title}</h3>
+                  <span>
+                    Pogledaj ponudu <FiArrowRight />
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
         {/* Filters */}
         <div className="filters">
-          {/* Search */}
           <div className="search-box">
             <FiSearch />
             <input
@@ -90,19 +153,17 @@ const Shop = () => {
             />
           </div>
 
-          {/* Category Filter */}
           <select
             value={filters.category}
             onChange={(e) => handleFilterChange('category', e.target.value)}
             className="filter-select"
           >
             <option value="">Sve kategorije</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
+            {categoryCards.map((cat) => (
+              <option key={cat.value} value={cat.value}>{cat.title}</option>
             ))}
           </select>
 
-          {/* Sort */}
           <select
             value={filters.sort}
             onChange={(e) => handleFilterChange('sort', e.target.value)}
@@ -115,7 +176,6 @@ const Shop = () => {
           </select>
         </div>
 
-        {/* PROMO BANNER ZA MUŠKA ODELA */}
         {showSuitPromo && (
           <div className="shop-promo-banner">
             <div className="promo-badge">SPECIJALNA PONUDA</div>
@@ -127,12 +187,12 @@ const Shop = () => {
           </div>
         )}
 
-        {/* Products Grid */}
         {loading ? (
           <div className="loading">Učitavanje proizvoda...</div>
         ) : (
           <>
             <div className="products-count">
+              {filters.category ? `Kategorija: ${filters.category} • ` : ''}
               Pronađeno: {products.length} proizvoda
             </div>
 

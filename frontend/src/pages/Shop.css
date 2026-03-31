@@ -3,6 +3,71 @@
   min-height: 100vh;
 }
 
+.shop-categories-section {
+  margin-bottom: 45px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.category-card {
+  min-height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.1));
+  z-index: 1;
+}
+
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.14);
+}
+
+.shop-category-card.active {
+  outline: 3px solid var(--secondary-color);
+  transform: translateY(-4px);
+}
+
+.category-card-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.category-card h3 {
+  font-size: 20px;
+  line-height: 1.35;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.category-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
 .filters {
   display: flex;
   gap: 20px;
@@ -45,7 +110,7 @@
   border-radius: 8px;
 }
 
-/* PROMO BANNER */
+/* Promo Banner */
 .shop-promo-banner {
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   color: white;
@@ -129,6 +194,20 @@
 }
 
 @media (max-width: 768px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .category-card {
+    min-height: 150px;
+    padding: 20px;
+  }
+
+  .category-card h3 {
+    font-size: 18px;
+  }
+
   .filters {
     flex-direction: column;
   }
