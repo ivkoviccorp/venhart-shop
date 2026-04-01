@@ -260,3 +260,59 @@
     width: 100%;
   }
 }
+.shop-category-hero {
+  min-height: 260px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-end;
+  padding: 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.shop-category-hero-content {
+  color: white;
+  max-width: 700px;
+}
+
+.shop-category-tag {
+  display: inline-block;
+  background: rgba(212, 165, 116, 0.18);
+  color: #f4d3a5;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.shop-category-hero-content h2 {
+  font-size: 34px;
+  margin-bottom: 12px;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.shop-category-hero-content p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .shop-category-hero {
+    min-height: 220px;
+    padding: 22px 18px;
+  }
+
+  .shop-category-hero-content h2 {
+    font-size: 26px;
+  }
+
+  .shop-category-hero-content p {
+    font-size: 14px;
+  }
+}

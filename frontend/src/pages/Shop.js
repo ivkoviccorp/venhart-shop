@@ -23,62 +23,74 @@ const Shop = () => {
     {
       title: 'Muške farmerke',
       value: 'Muške farmerke',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774377063/venhart-shop/nidachoiukzlnhvewiv6.jpg'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774377063/venhart-shop/nidachoiukzlnhvewiv6.jpg',
+      description: 'Pažljivo odabrani modeli farmerki za moderan i elegantan svakodnevni izgled.'
     },
     {
       title: 'Muška odela',
       value: 'Muška odela',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774376054/venhart-shop/kukeneqoxtikvmnkkg5q.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774376054/venhart-shop/kukeneqoxtikvmnkkg5q.webp',
+      description: 'Klasična i savremena odela za poslovne i svečane prilike.'
     },
     {
       title: 'Ženske haljine i kompleti',
       value: 'Haljine',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp',
+      description: 'Elegantni modeli za upečatljiv i sofisticiran ženski stil.'
     },
     {
       title: 'Muški sakoi',
       value: 'Muški sakoi',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731575/venhart-shop/sxa0knrny8zer9vxcqzq.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731575/venhart-shop/sxa0knrny8zer9vxcqzq.webp',
+      description: 'Sakoi koji spajaju eleganciju, kvalitet i moderan kroj.'
     },
     {
       title: 'Muške košulje i natkošulje',
       value: 'Muške košulje i natkošulje',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731962/venhart-shop/g07vkjvmghyaltjjzusi.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774731962/venhart-shop/g07vkjvmghyaltjjzusi.webp',
+      description: 'Košulje i natkošulje za poslovni, elegantni i casual stil.'
     },
     {
       title: 'Ženska odela',
       value: 'Ženska odela',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774732113/venhart-shop/wurngrwyckcxrk3jwdra.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774732113/venhart-shop/wurngrwyckcxrk3jwdra.webp',
+      description: 'Ženska odela sa fokusom na eleganciju, stil i besprekoran kroj.'
     },
     {
       title: 'Muški džemperi',
       value: 'Muški džemperi',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733423/venhart-shop/ma8wdz0hvi5jnjfgcxwx.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733423/venhart-shop/ma8wdz0hvi5jnjfgcxwx.webp',
+      description: 'Udobni i elegantni džemperi za savremeni muški stil.'
     },
     {
       title: 'Ženski triko kompleti',
       value: 'Ženski triko komplet',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733759/venhart-shop/muoyh2ivw25sum1xihwc.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733759/venhart-shop/muoyh2ivw25sum1xihwc.webp',
+      description: 'Triko kompleti koji spajaju udobnost, ženstvenost i savremen dizajn.'
     },
     {
       title: 'Ženski sakoi',
       value: 'Ženski sakoi',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733882/venhart-shop/xevqjnnwvuhjjqrkgnza.jpg'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774733882/venhart-shop/xevqjnnwvuhjjqrkgnza.jpg',
+      description: 'Elegantni ženski sakoi za poslovne i posebne prilike.'
     },
     {
       title: 'Muške kravate i aksesoari',
       value: 'Muške kravate i aksesoari',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734343/venhart-shop/ndjujdf8oe9xplipywnq.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734343/venhart-shop/ndjujdf8oe9xplipywnq.webp',
+      description: 'Detalji koji upotpunjuju stil — kravate, aksesoari i elegancija.'
     },
     {
       title: 'Muške majice',
       value: 'Muške majice',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734460/venhart-shop/swxkhappel1anocyrxki.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734460/venhart-shop/swxkhappel1anocyrxki.webp',
+      description: 'Savremene muške majice za opušten, čist i moderan izgled.'
     },
     {
       title: 'Ženske pantalone',
       value: 'Ženske pantalone',
-      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774904028/venhart-shop/dlu5ogf02asslywv4kee.webp'
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774904028/venhart-shop/dlu5ogf02asslywv4kee.webp',
+      description: 'Ženske pantalone koje kombinuju eleganciju i udobnost.'
     }
   ];
 
@@ -141,6 +153,8 @@ const Shop = () => {
   const showSuitPromo =
     filters.category === 'Muška odela' ||
     products.some((product) => product.category === 'Muška odela');
+
+  const activeCategory = categoryCards.find((cat) => cat.value === filters.category);
 
   return (
     <div className="shop">
@@ -223,6 +237,24 @@ const Shop = () => {
             Prikaži sve proizvode
           </button>
         </div>
+
+        {/* CATEGORY HERO / BANNER */}
+        {activeCategory && (
+          <div
+            className="shop-category-hero"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${activeCategory.image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            <div className="shop-category-hero-content">
+              <span className="shop-category-tag">Kolekcija</span>
+              <h2>{activeCategory.title}</h2>
+              <p>{activeCategory.description}</p>
+            </div>
+          </div>
+        )}
 
         {showSuitPromo && (
           <div className="shop-promo-banner">
