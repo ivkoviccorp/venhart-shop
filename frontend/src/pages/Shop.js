@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { FiSearch, FiArrowRight } from 'react-icons/fi';
 import './Shop.css';
 
 const Shop = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const categoryFromUrl = searchParams.get('category') || '';
   const productsSectionRef = useRef(null);
 
@@ -117,14 +118,12 @@ const Shop = () => {
   };
 
   const handleFilterChange = (key, value) => {
-    setFilters({ ...filters, [key]: value });
+    const updatedFilters = { ...filters, [key]: value };
+    setFilters(updatedFilters);
   };
 
   const handleCategoryCardClick = (value) => {
-    setFilters((prev) => ({
-      ...prev,
-      category: value
-    }));
+    navigate(`/shop?category=${encodeURIComponent(value)}`);
     scrollToProducts();
   };
 
@@ -135,6 +134,7 @@ const Shop = () => {
       gender: '',
       sort: 'newest',
     });
+    navigate('/shop');
     scrollToProducts();
   };
 
