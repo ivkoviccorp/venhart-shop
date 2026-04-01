@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { FiSearch, FiArrowRight } from 'react-icons/fi';
@@ -7,6 +7,7 @@ import './Shop.css';
 const Shop = () => {
   const [searchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || '';
+  const productsSectionRef = useRef(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,8 +105,27 @@ const Shop = () => {
     }
   };
 
+  const scrollToProducts = () => {
+    setTimeout(() => {
+      if (productsSectionRef.current) {
+        productsSectionRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 100);
+  };
+
   const handleFilterChange = (key, value) => {
     setFilters({ ...filters, [key]: value });
+  };
+
+  const handleCategoryCardClick = (value) => {
+    setFilters((prev) => ({
+      ...prev,
+      category: value
+    }));
+    scrollToProducts();
   };
 
   const resetFilters = () => {
@@ -115,6 +135,7 @@ const Shop = () => {
       gender: '',
       sort: 'newest',
     });
+    scrollToProducts();
   };
 
   const showSuitPromo =
@@ -133,7 +154,7 @@ const Shop = () => {
               <button
                 key={category.value}
                 className={`category-card shop-category-card ${filters.category === category.value ? 'active' : ''}`}
-                onClick={() => handleFilterChange('category', category.value)}
+                onClick={() => handleCategoryCardClick(category.value)}
                 style={{
                   backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url(${category.image})`,
                   backgroundSize: 'cover',
@@ -214,52 +235,54 @@ const Shop = () => {
           </div>
         )}
 
-        {loading ? (
-          <div className="loading">Učitavanje proizvoda...</div>
-        ) : (
-          <>
-            <div className="products-count">
-              {filters.category ? `Kategorija: ${filters.category} • ` : ''}
-              {filters.gender ? `Pol: ${filters.gender} • ` : ''}
-              Pronađeno: {products.length} proizvoda
-            </div>
-
-            <div className="products-grid">
-              {products.map((product) => (
-                <Link
-                  to={`/product/${product._id}`}
-                  key={product._id}
-                  className="product-card"
-                >
-                  <div className="product-image">
-                    <img
-                      src={product.images[0]?.url || '/placeholder.jpg'}
-                      alt={product.name}
-                    />
-                    {product.onSale && <span className="badge sale">SALE</span>}
-                    {product.isNew && <span className="badge new">NEW</span>}
-                  </div>
-                  <div className="product-info">
-                    <p className="product-category">{product.category}</p>
-                    <h3>{product.name}</h3>
-                    <div className="product-price">
-                      {product.oldPrice && (
-                        <span className="old-price">{product.oldPrice.toLocaleString()} RSD</span>
-                      )}
-                      <span className="price">{product.price.toLocaleString()} RSD</span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {products.length === 0 && (
-              <div className="no-products">
-                <p>Nema proizvoda koji odgovaraju vašoj pretrazi.</p>
+        <div ref={productsSectionRef}>
+          {loading ? (
+            <div className="loading">Učitavanje proizvoda...</div>
+          ) : (
+            <>
+              <div className="products-count">
+                {filters.category ? `Kategorija: ${filters.category} • ` : ''}
+                {filters.gender ? `Pol: ${filters.gender} • ` : ''}
+                Pronađeno: {products.length} proizvoda
               </div>
-            )}
-          </>
-        )}
+
+              <div className="products-grid">
+                {products.map((product) => (
+                  <Link
+                    to={`/product/${product._id}`}
+                    key={product._id}
+                    className="product-card"
+                  >
+                    <div className="product-image">
+                      <img
+                        src={product.images[0]?.url || '/placeholder.jpg'}
+                        alt={product.name}
+                      />
+                      {product.onSale && <span className="badge sale">SALE</span>}
+                      {product.isNew && <span className="badge new">NEW</span>}
+                    </div>
+                    <div className="product-info">
+                      <p className="product-category">{product.category}</p>
+                      <h3>{product.name}</h3>
+                      <div className="product-price">
+                        {product.oldPrice && (
+                          <span className="old-price">{product.oldPrice.toLocaleString()} RSD</span>
+                        )}
+                        <span className="price">{product.price.toLocaleString()} RSD</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {products.length === 0 && (
+                <div className="no-products">
+                  <p>Nema proizvoda koji odgovaraju vašoj pretrazi.</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
