@@ -69,6 +69,11 @@ const Home = () => {
       title: 'Ženske pantalone',
       value: 'Ženske pantalone',
       image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774904028/venhart-shop/dlu5ogf02asslywv4kee.webp'
+    },
+    {
+      title: 'Čarape',
+      value: 'Čarape',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774734039/venhart-shop/ykk1nt4f5cpfrtqvf7ok.jpg'
     }
   ];
 
