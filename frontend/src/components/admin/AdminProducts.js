@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { productsAPI } from '../../utils/api';
+import { formatPrice } from '../../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2, FiTrash2, FiEye, FiEyeOff, FiFilter } from 'react-icons/fi';
 import ProductForm from './ProductForm';
@@ -13,7 +14,6 @@ const AdminProducts = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Lista kategorija za filter
   const categories = [
     'Muška odela',
     'Muški sakoi',
@@ -33,7 +33,6 @@ const AdminProducts = () => {
     'Jakne i kaputi',
     'Muške kravate i aksesoari',
     'Čarape',
-    
     'Cipele',
     'Torbe',
     'Ostalo'
@@ -43,7 +42,6 @@ const AdminProducts = () => {
     fetchProducts();
   }, []);
 
-  // Filtriraj proizvode kad se promeni kategorija ili proizvodi
   useEffect(() => {
     if (selectedCategory === 'all') {
       setFilteredProducts(products);
@@ -124,7 +122,6 @@ const AdminProducts = () => {
         </button>
       </div>
 
-      {/* NOVO: Filter po kategorijama */}
       <div className="admin-products-filter">
         <div className="filter-group">
           <FiFilter className="filter-icon" />
@@ -157,7 +154,6 @@ const AdminProducts = () => {
         )}
       </div>
 
-      {/* Product Form Modal */}
       {showForm && (
         <ProductForm 
           product={editingProduct} 
@@ -165,7 +161,6 @@ const AdminProducts = () => {
         />
       )}
 
-      {/* Products Table */}
       <div className="products-table-container">
         <table className="products-table">
           <thead>
@@ -196,9 +191,9 @@ const AdminProducts = () => {
                 <td>
                   <div className="product-pricing">
                     {product.oldPrice && (
-                      <span className="old-price">{product.oldPrice.toLocaleString()}</span>
+                      <span className="old-price">{formatPrice(product.oldPrice)}</span>
                     )}
-                    <span className="price">{product.price.toLocaleString()} RSD</span>
+                    <span className="price">{formatPrice(product.price)}</span>
                   </div>
                 </td>
                 <td>

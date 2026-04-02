@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
+import { formatPrice } from '../utils/formatPrice';
 import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 import './Home.css';
 
@@ -231,9 +232,9 @@ const Home = () => {
                     <h3>{product.name}</h3>
                     <div className="product-price">
                       {product.oldPrice && (
-                        <span className="old-price">{product.oldPrice.toLocaleString()} RSD</span>
+                        <span className="old-price">{formatPrice(product.oldPrice)}</span>
                       )}
-                      <span className="price">{product.price.toLocaleString()} RSD</span>
+                      <span className="price">{formatPrice(product.price)}</span>
                     </div>
                   </div>
                 </Link>

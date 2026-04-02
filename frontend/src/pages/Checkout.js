@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ordersAPI } from '../utils/api';
+import { formatPrice } from '../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiMapPin, FiTruck, FiGift, FiTag } from 'react-icons/fi';
 import './Checkout.css';
@@ -14,7 +15,6 @@ const Checkout = () => {
     getSubtotalPrice,
     getTieDiscount,
     getDiscountedTieCount,
-    getSuitCount,
     clearCart
   } = useCart();
   
@@ -41,7 +41,6 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Izračunaj popust za pojedinačne artikle (kravate)
   const getDiscountedItemsForOrder = () => {
     let discountedTieCountLeft = getDiscountedTieCount();
 
@@ -52,7 +51,7 @@ const Checkout = () => {
         const discountedQty = Math.min(item.quantity, discountedTieCountLeft);
         discountedTieCountLeft -= discountedQty;
 
-        const discountedPrice = item.product.price * 0.8; // 20% popusta
+        const discountedPrice = item.product.price * 0.8;
 
         return {
           product: item.product._id,
@@ -142,7 +141,6 @@ const Checkout = () => {
           <div className="checkout-grid">
             {/* Left Side - Form */}
             <div className="checkout-details">
-              {/* Contact Info */}
               <div className="form-section">
                 <h3>Kontakt informacije</h3>
                 
@@ -193,7 +191,6 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Delivery Method */}
               <div className="form-section">
                 <h3>Način preuzimanja</h3>
 
@@ -239,7 +236,6 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Shipping Address */}
               {deliveryMethod === 'delivery' && (
                 <div className="form-section">
                   <h3>Adresa dostave</h3>
@@ -292,7 +288,6 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Gift Wrap Option */}
               <div className="form-section gift-section">
                 <label className={`gift-option ${giftWrap ? 'active' : ''}`}>
                   <input
@@ -306,7 +301,7 @@ const Checkout = () => {
                   <div className="gift-content">
                     <strong>Elegantno poklon pakovanje</strong>
                     <p>Vaš artikal će biti pažljivo upakovan u luksuznu poklon kutiju sa satenskom trakom i brendiranom Venhart kesom — savršeno za posebne prilike.</p>
-                    <span className="gift-price">+ 200 RSD</span>
+                    <span className="gift-price">+ 200,00 RSD</span>
                   </div>
                 </label>
               </div>
@@ -330,7 +325,7 @@ const Checkout = () => {
                       </p>
                     </div>
                     <div className="summary-item-price">
-                      {(item.product.price * item.quantity).toLocaleString()} RSD
+                      {formatPrice(item.product.price * item.quantity)}
                     </div>
                   </div>
                 ))}
@@ -339,7 +334,7 @@ const Checkout = () => {
               <div className="summary-totals">
                 <div className="summary-row">
                   <span>Međuzbir:</span>
-                  <span>{getSubtotalPrice().toLocaleString()} RSD</span>
+                  <span>{formatPrice(getSubtotalPrice())}</span>
                 </div>
 
                 {getTieDiscount() > 0 && (
@@ -354,7 +349,7 @@ const Checkout = () => {
 
                     <div className="summary-row discount">
                       <span>Popust na kravatu:</span>
-                      <span>- {getTieDiscount().toLocaleString()} RSD</span>
+                      <span>- {formatPrice(getTieDiscount())}</span>
                     </div>
                   </>
                 )}
@@ -362,13 +357,13 @@ const Checkout = () => {
                 {giftWrap && (
                   <div className="summary-row gift-row">
                     <span>🎁 Poklon pakovanje:</span>
-                    <span>{giftWrapCost.toLocaleString()} RSD</span>
+                    <span>{formatPrice(giftWrapCost)}</span>
                   </div>
                 )}
 
                 <div className="summary-row total">
                   <span>Ukupno:</span>
-                  <span>{totalAmount.toLocaleString()} RSD</span>
+                  <span>{formatPrice(totalAmount)}</span>
                 </div>
               </div>
 

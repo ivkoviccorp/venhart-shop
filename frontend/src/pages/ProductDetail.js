@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiTag } from 'react-icons/fi';
 import './ProductDetail.css';
@@ -27,7 +28,6 @@ const ProductDetail = () => {
       const response = await productsAPI.getById(id);
       setProduct(response.data.product);
 
-      // Auto-select first size that has stock
       const firstAvailableSize = response.data.product.sizes?.find((s) => s.stock > 0);
       if (firstAvailableSize) {
         setSelectedSize(firstAvailableSize.size);
@@ -120,12 +120,11 @@ const ProductDetail = () => {
 
             <div className="product-price-section">
               {product.oldPrice && (
-                <span className="old-price">{product.oldPrice.toLocaleString()} RSD</span>
+                <span className="old-price">{formatPrice(product.oldPrice)}</span>
               )}
-              <span className="price">{product.price.toLocaleString()} RSD</span>
+              <span className="price">{formatPrice(product.price)}</span>
             </div>
 
-            {/* PROMO BANNER ZA MUŠKA ODELA */}
             {showTiePromo && (
               <div className="product-promo-banner">
                 <div className="promo-icon">

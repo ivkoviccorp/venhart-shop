@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/formatPrice';
 import { FiTrash2, FiShoppingBag, FiTag } from 'react-icons/fi';
 import './Cart.css';
 
@@ -56,7 +57,7 @@ const Cart = () => {
                     )}
                   </p>
                   <p className="cart-item-price">
-                    {item.product.price.toLocaleString()} RSD
+                    {formatPrice(item.product.price)}
                   </p>
                 </div>
 
@@ -83,7 +84,7 @@ const Cart = () => {
                 </div>
 
                 <div className="cart-item-total">
-                  {(item.product.price * item.quantity).toLocaleString()} RSD
+                  {formatPrice(item.product.price * item.quantity)}
                 </div>
               </div>
             ))}
@@ -100,7 +101,7 @@ const Cart = () => {
 
             <div className="summary-row">
               <span>Međuzbir:</span>
-              <span>{getSubtotalPrice().toLocaleString()} RSD</span>
+              <span>{formatPrice(getSubtotalPrice())}</span>
             </div>
 
             {getTieDiscount() > 0 && (
@@ -115,14 +116,14 @@ const Cart = () => {
 
                 <div className="summary-row discount">
                   <span>Popust na kravatu:</span>
-                  <span>- {getTieDiscount().toLocaleString()} RSD</span>
+                  <span>- {formatPrice(getTieDiscount())}</span>
                 </div>
               </>
             )}
 
             <div className="summary-row total">
               <span>Ukupno:</span>
-              <span>{getTotalPrice().toLocaleString()} RSD</span>
+              <span>{formatPrice(getTotalPrice())}</span>
             </div>
 
             <button
