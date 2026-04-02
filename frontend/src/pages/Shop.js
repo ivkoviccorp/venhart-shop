@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
+import { formatPrice } from '../utils/formatPrice';
 import { FiSearch, FiArrowRight } from 'react-icons/fi';
 import './Shop.css';
 
@@ -298,9 +299,9 @@ const Shop = () => {
                       <h3>{product.name}</h3>
                       <div className="product-price">
                         {product.oldPrice && (
-                          <span className="old-price">{product.oldPrice.toLocaleString()} RSD</span>
+                          <span className="old-price">{formatPrice(product.oldPrice)}</span>
                         )}
-                        <span className="price">{product.price.toLocaleString()} RSD</span>
+                        <span className="price">{formatPrice(product.price)}</span>
                       </div>
                     </div>
                   </Link>
