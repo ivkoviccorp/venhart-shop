@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ordersAPI } from '../../utils/api';
+import { formatPrice } from '../../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiCheck, FiX, FiUser, FiMail, FiPhone, FiMapPin, FiTruck, FiPackage } from 'react-icons/fi';
 import './AdminOrderDetail.css';
@@ -171,8 +172,8 @@ const AdminOrderDetail = () => {
                   <p>Količina: <strong>{item.quantity}</strong></p>
                 </div>
                 <div className="item-price">
-                  <span className="unit-price">{item.price.toLocaleString()} RSD</span>
-                  <span className="total-price">{(item.price * item.quantity).toLocaleString()} RSD</span>
+                  <span className="unit-price">{formatPrice(item.price)}</span>
+                  <span className="total-price">{formatPrice(item.price * item.quantity)}</span>
                 </div>
               </div>
             ))}
@@ -181,23 +182,23 @@ const AdminOrderDetail = () => {
           <div className="order-summary">
             <div className="summary-row">
               <span>Međuzbir:</span>
-              <span>{(order.totalAmount - (order.shippingCost || 0)).toLocaleString()} RSD</span>
+              <span>{formatPrice(order.totalAmount - (order.shippingCost || 0))}</span>
             </div>
             {order.shippingCost > 0 && (
               <div className="summary-row">
                 <span>Dostava:</span>
-                <span>{order.shippingCost.toLocaleString()} RSD</span>
+                <span>{formatPrice(order.shippingCost)}</span>
               </div>
             )}
             {order.giftWrap && (
               <div className="summary-row">
                 <span>🎁 Poklon pakovanje:</span>
-                <span>200 RSD</span>
+                <span>{formatPrice(200)}</span>
               </div>
             )}
             <div className="summary-row total">
               <span>UKUPNO:</span>
-              <span>{order.totalAmount.toLocaleString()} RSD</span>
+              <span>{formatPrice(order.totalAmount)}</span>
             </div>
           </div>
         </div>

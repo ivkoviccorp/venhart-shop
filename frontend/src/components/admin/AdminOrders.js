@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ordersAPI } from '../../utils/api';
+import { formatPrice } from '../../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiEye, FiClock, FiCheck, FiX, FiPackage, FiTruck, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import './AdminOrders.css';
@@ -152,7 +153,7 @@ const AdminOrders = () => {
 
                 <div className="order-info-group">
                   <label>Ukupno</label>
-                  <span className="order-total">{order.totalAmount.toLocaleString()} RSD</span>
+                  <span className="order-total">{formatPrice(order.totalAmount)}</span>
                 </div>
 
                 <div className="order-info-group">
