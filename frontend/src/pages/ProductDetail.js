@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/formatPrice';
+import { trackAddToCart } from '../utils/analytics';
 import { toast } from 'react-toastify';
 import { FiTag } from 'react-icons/fi';
 import './ProductDetail.css';
@@ -65,6 +66,7 @@ const ProductDetail = () => {
     }
 
     addToCart(product, selectedSize, selectedColor, quantity);
+    trackAddToCart(product, quantity);
   };
 
   const handleQuantityChange = (value) => {

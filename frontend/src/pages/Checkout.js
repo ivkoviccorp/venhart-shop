@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ordersAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
+import { trackBeginCheckout, trackPurchase } from '../utils/analytics';
 import { toast } from 'react-toastify';
 import { FiMapPin, FiTruck, FiGift, FiTag } from 'react-icons/fi';
 import './Checkout.css';
@@ -36,6 +37,13 @@ const Checkout = () => {
   const shippingCost = 0;
   const giftWrapCost = giftWrap ? 200 : 0;
   const totalAmount = getTotalPrice() + shippingCost + giftWrapCost;
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      trackBeginCheckout(cartItems, totalAmount);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -110,7 +118,11 @@ const Checkout = () => {
         giftWrap,
       };
 
-      await ordersAPI.create(orderData);
+      const response = await ordersAPI.create(orderData);
+
+      if (response?.data?.order?.orderNumber) {
+        trackPurchase(response.data.order.orderNumber, cartItems, totalAmount);
+      }
       
       toast.success('Porudžbina uspešno poslata! Proverite email.');
       clearCart();
