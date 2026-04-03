@@ -153,6 +153,26 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Payment Coming Soon Banner */}
+      <section className="payment-banner">
+        <div className="container">
+          <div className="payment-banner-box">
+            <span className="payment-badge">USKORO</span>
+            <h2>Online plaćanje karticama uskoro dostupno</h2>
+            <p>
+              Trenutno je dostupno plaćanje pouzećem, a uskoro uvodimo i online plaćanje
+              karticama radi još brže i jednostavnije kupovine.
+            </p>
+            <div className="payment-methods">
+              <span>Visa</span>
+              <span>Mastercard</span>
+              <span>Dina</span>
+              <span>Maestro</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Brand / Intro Section */}
       <section className="brand-highlight">
         <div className="container">
