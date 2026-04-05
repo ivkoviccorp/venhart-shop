@@ -81,6 +81,67 @@
   letter-spacing: 2px;
 }
 
+/* First Purchase Banner */
+.first-purchase-banner {
+  padding: 35px 0 0;
+  background: #ffffff;
+}
+
+.first-purchase-box {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: linear-gradient(135deg, #1f1f1f 0%, #2b2b2b 100%);
+  color: white;
+  border-radius: 18px;
+  padding: 32px 30px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+.first-purchase-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(212, 165, 116, 0.18);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.first-purchase-content {
+  flex: 1;
+}
+
+.first-purchase-badge {
+  display: inline-block;
+  background: var(--secondary-color);
+  color: white;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.first-purchase-content h2 {
+  font-size: 30px;
+  margin-bottom: 12px;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.first-purchase-content p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}
+
 /* Benefits / Trust Section */
 .benefits-section {
   padding: 70px 0;
@@ -544,6 +605,26 @@
 
   .benefit-card {
     padding: 22px 18px;
+  }
+
+  .first-purchase-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px 20px;
+  }
+
+  .first-purchase-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+
+  .first-purchase-content h2 {
+    font-size: 24px;
+  }
+
+  .first-purchase-content p {
+    font-size: 14px;
   }
 
   .payment-banner-box {
