@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { productsAPI } from '../utils/api';
+import { productsAPI, newsletterAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
-import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent, FiMail } from 'react-icons/fi';
 import './Home.css';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
 
   const categoryCards = [
     {
@@ -89,6 +92,27 @@ const Home = () => {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!newsletterEmail.trim()) {
+      toast.warning('Unesite email adresu');
+      return;
+    }
+
+    setNewsletterLoading(true);
+
+    try {
+      await newsletterAPI.subscribe({ email: newsletterEmail });
+      toast.success('Uspešno ste prijavljeni na newsletter!');
+      setNewsletterEmail('');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Greška pri prijavi na newsletter');
+    } finally {
+      setNewsletterLoading(false);
     }
   };
 
@@ -294,6 +318,35 @@ const Home = () => {
             <Link to="/shop" className="btn btn-outline-dark">
               Pogledaj sve proizvode <FiArrowRight />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="newsletter-section">
+        <div className="container">
+          <div className="newsletter-box">
+            <div className="newsletter-icon">
+              <FiMail />
+            </div>
+            <span className="newsletter-badge">NEWSLETTER</span>
+            <h2>Prijavite se za Venhart novosti</h2>
+            <p>
+              Budite među prvima koji će saznati za nove kolekcije, posebne ponude i ekskluzivne pogodnosti.
+            </p>
+
+            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+              <input
+                type="email"
+                placeholder="Unesite vašu email adresu"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="btn newsletter-btn" disabled={newsletterLoading}>
+                {newsletterLoading ? 'Prijava...' : 'Prijavi se'}
+              </button>
+            </form>
           </div>
         </div>
       </section>
