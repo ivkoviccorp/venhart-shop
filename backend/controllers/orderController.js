@@ -9,7 +9,17 @@ exports.createOrder = async (req, res) => {
     console.log('=== NOVA PORUDŽBINA ===');
     console.log('Body:', JSON.stringify(req.body, null, 2));
     
-    const { customer, items, deliveryMethod, shippingAddress, shippingCost, totalAmount, giftWrap } = req.body;
+    const {
+      customer,
+      items,
+      deliveryMethod,
+      shippingAddress,
+      shippingCost,
+      totalAmount,
+      giftWrap,
+      promoCode,
+      promoDiscount
+    } = req.body;
 
     console.log('Provera zaliha...');
 
@@ -43,6 +53,20 @@ exports.createOrder = async (req, res) => {
       }
     }
 
+    // Provera promo koda za prvu kupovinu
+    if (promoCode && promoCode === 'PRVA10') {
+      const existingOrder = await Order.findOne({
+        'customer.email': customer.email
+      });
+
+      if (existingOrder) {
+        return res.status(400).json({
+          success: false,
+          message: 'Promo kod PRVA10 važi samo za prvu kupovinu'
+        });
+      }
+    }
+
     console.log('Kreiranje porudžbine...');
 
     const order = await Order.create({
@@ -52,7 +76,9 @@ exports.createOrder = async (req, res) => {
       shippingAddress: deliveryMethod === 'delivery' ? shippingAddress : undefined,
       shippingCost: shippingCost || 0,
       giftWrap: giftWrap || false,
-      totalAmount
+      totalAmount,
+      promoCode: promoCode || null,
+      promoDiscount: promoDiscount || 0
     });
 
     console.log('Porudžbina kreirana:', order.orderNumber);

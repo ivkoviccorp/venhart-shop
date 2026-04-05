@@ -22,7 +22,10 @@ const Checkout = () => {
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [giftWrap, setGiftWrap] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+  const [promoCode, setPromoCode] = useState('');
+  const [promoDiscount, setPromoDiscount] = useState(0);
+  const [promoApplied, setPromoApplied] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -36,17 +39,43 @@ const Checkout = () => {
 
   const shippingCost = 0;
   const giftWrapCost = giftWrap ? 200 : 0;
-  const totalAmount = getTotalPrice() + shippingCost + giftWrapCost;
+
+  const subtotalWithTieDiscount = getTotalPrice();
+  const finalTotal = subtotalWithTieDiscount - promoDiscount + shippingCost + giftWrapCost;
 
   useEffect(() => {
     if (cartItems.length > 0) {
-      trackBeginCheckout(cartItems, totalAmount);
+      trackBeginCheckout(cartItems, finalTotal);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const applyPromoCode = () => {
+    if (!promoCode.trim()) {
+      toast.warning('Unesite promo kod');
+      return;
+    }
+
+    if (promoCode.trim().toUpperCase() !== 'PRVA10') {
+      toast.error('Promo kod nije ispravan');
+      return;
+    }
+
+    const discountAmount = subtotalWithTieDiscount * 0.10;
+    setPromoDiscount(discountAmount);
+    setPromoApplied(true);
+    toast.success('Promo kod je uspešno primenjen');
+  };
+
+  const removePromoCode = () => {
+    setPromoCode('');
+    setPromoDiscount(0);
+    setPromoApplied(false);
+    toast.info('Promo kod je uklonjen');
   };
 
   const getDiscountedItemsForOrder = () => {
@@ -114,14 +143,16 @@ const Checkout = () => {
           note: formData.note,
         } : undefined,
         shippingCost: shippingCost + giftWrapCost,
-        totalAmount,
+        totalAmount: finalTotal,
         giftWrap,
+        promoCode: promoApplied ? promoCode.trim().toUpperCase() : null,
+        promoDiscount
       };
 
       const response = await ordersAPI.create(orderData);
 
       if (response?.data?.order?.orderNumber) {
-        trackPurchase(response.data.order.orderNumber, cartItems, totalAmount);
+        trackPurchase(response.data.order.orderNumber, cartItems, finalTotal);
       }
       
       toast.success('Porudžbina uspešno poslata! Proverite email.');
@@ -300,6 +331,30 @@ const Checkout = () => {
                 </div>
               )}
 
+              {/* Promo Code */}
+              <div className="form-section">
+                <h3>Promo kod</h3>
+                <div className="promo-code-box">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    placeholder="Unesite promo kod"
+                    disabled={promoApplied}
+                  />
+                  {!promoApplied ? (
+                    <button type="button" className="btn btn-apply-promo" onClick={applyPromoCode}>
+                      Primeni
+                    </button>
+                  ) : (
+                    <button type="button" className="btn btn-remove-promo" onClick={removePromoCode}>
+                      Ukloni
+                    </button>
+                  )}
+                </div>
+                <p className="promo-hint">Promo kod za prvu kupovinu: <strong>PRVA10</strong></p>
+              </div>
+
               <div className="form-section gift-section">
                 <label className={`gift-option ${giftWrap ? 'active' : ''}`}>
                   <input
@@ -312,7 +367,7 @@ const Checkout = () => {
                   </div>
                   <div className="gift-content">
                     <strong>Elegantno poklon pakovanje</strong>
-                  <p>Vaš artikal će biti pažljivo upakovan sa satenskom trakom i ukrasnom poklon kesom — savršeno za posebne prilike.</p>  
+                    <p>Vaš artikal će biti pažljivo upakovan sa satenskom trakom i ukrasnom poklon kesom — savršeno za posebne prilike.</p>
                     <span className="gift-price">+ 200,00 RSD</span>
                   </div>
                 </label>
@@ -366,6 +421,13 @@ const Checkout = () => {
                   </>
                 )}
 
+                {promoDiscount > 0 && (
+                  <div className="summary-row discount">
+                    <span>Promo kod ({promoCode.toUpperCase()}):</span>
+                    <span>- {formatPrice(promoDiscount)}</span>
+                  </div>
+                )}
+
                 {giftWrap && (
                   <div className="summary-row gift-row">
                     <span>🎁 Poklon pakovanje:</span>
@@ -375,7 +437,7 @@ const Checkout = () => {
 
                 <div className="summary-row total">
                   <span>Ukupno:</span>
-                  <span>{formatPrice(totalAmount)}</span>
+                  <span>{formatPrice(finalTotal)}</span>
                 </div>
               </div>
 
