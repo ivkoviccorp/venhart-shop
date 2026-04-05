@@ -312,7 +312,7 @@ const Checkout = () => {
                   </div>
                   <div className="gift-content">
                     <strong>Elegantno poklon pakovanje</strong>
-                    <p>Vaš artikal će biti pažljivo upakovan u luksuznu poklon kutiju sa satenskom trakom i brendiranom Venhart kesom — savršeno za posebne prilike.</p>
+                  <p>Vaš artikal će biti pažljivo upakovan sa satenskom trakom i ukrasnom poklon kesom — savršeno za posebne prilike.</p>  
                     <span className="gift-price">+ 200,00 RSD</span>
                   </div>
                 </label>
