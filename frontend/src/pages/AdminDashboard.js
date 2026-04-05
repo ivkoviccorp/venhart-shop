@@ -16,7 +16,8 @@ import {
   FiAlertTriangle,
   FiRefreshCw,
   FiCalendar,
-  FiBarChart2
+  FiBarChart2,
+  FiMail
 } from 'react-icons/fi';
 import './AdminDashboard.css';
 
@@ -24,6 +25,7 @@ import './AdminDashboard.css';
 import AdminProducts from '../components/admin/AdminProducts';
 import AdminOrders from '../components/admin/AdminOrders';
 import AdminOrderDetail from '../components/admin/AdminOrderDetail';
+import AdminNewsletter from '../components/admin/AdminNewsletter';
 
 const AdminDashboard = () => {
   const { user, isAdmin, logout, loading: authLoading } = useAuth();
@@ -84,6 +86,9 @@ const AdminDashboard = () => {
           <Link to="/admin/orders" className="admin-nav-link">
             <FiPackage /> Porudžbine
           </Link>
+          <Link to="/admin/newsletter" className="admin-nav-link">
+            <FiMail /> Newsletter
+          </Link>
           <Link to="/admin/settings" className="admin-nav-link">
             <FiSettings /> Podešavanja
           </Link>
@@ -104,6 +109,7 @@ const AdminDashboard = () => {
           <Route path="/products" element={<AdminProducts />} />
           <Route path="/orders" element={<AdminOrders />} />
           <Route path="/orders/:id" element={<AdminOrderDetail />} />
+          <Route path="/newsletter" element={<AdminNewsletter />} />
           <Route path="/settings" element={<AdminSettings onRefresh={fetchStats} />} />
         </Routes>
       </main>
@@ -112,7 +118,7 @@ const AdminDashboard = () => {
 };
 
 // Dashboard Home Component
-const DashboardHome = ({ stats, loading, onRefresh }) => {
+const DashboardHome = ({ stats, loading }) => {
   if (loading) {
     return <div className="loading">Učitavanje...</div>;
   }
@@ -164,7 +170,6 @@ const DashboardHome = ({ stats, loading, onRefresh }) => {
           </div>
         </div>
 
-        {/* NOVO - Danas */}
         <div className="stat-card">
           <div className="stat-icon today-orders">
             <FiCalendar size={30} />
@@ -185,7 +190,6 @@ const DashboardHome = ({ stats, loading, onRefresh }) => {
           </div>
         </div>
 
-        {/* NOVO - Ove nedelje */}
         <div className="stat-card">
           <div className="stat-icon week-orders">
             <FiBarChart2 size={30} />
@@ -207,7 +211,6 @@ const DashboardHome = ({ stats, loading, onRefresh }) => {
         </div>
       </div>
 
-      {/* Recent Orders */}
       <div className="recent-orders">
         <h2>Poslednje porudžbine</h2>
         {stats?.recentOrders && stats.recentOrders.length > 0 ? (
@@ -351,7 +354,6 @@ const AdminSettings = ({ onRefresh }) => {
         </div>
       </div>
 
-      {/* Delete Orders Modal */}
       {showDeleteOrdersModal && (
         <div className="modal-overlay">
           <div className="modal-content danger-modal">
@@ -393,7 +395,6 @@ const AdminSettings = ({ onRefresh }) => {
         </div>
       )}
 
-      {/* Delete Products Modal */}
       {showDeleteProductsModal && (
         <div className="modal-overlay">
           <div className="modal-content danger-modal">
