@@ -59,4 +59,11 @@ export const ordersAPI = {
   deleteAll: () => api.delete('/orders/admin/reset-all'),
 };
 
+// Newsletter API
+export const newsletterAPI = {
+  subscribe: (emailData) => api.post('/newsletter', emailData),
+  getAll: () => api.get('/newsletter'),
+  delete: (id) => api.delete(`/newsletter/${id}`),
+};
+
 export default api;
