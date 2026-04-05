@@ -59,6 +59,14 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  promoCode: {
+    type: String,
+    default: null
+  },
+  promoDiscount: {
+    type: Number,
+    default: 0
+  },
   totalAmount: {
     type: Number,
     required: true
@@ -91,7 +99,6 @@ orderSchema.pre('save', async function() {
     
     this.orderNumber = `VH-${year}${month}${day}-${random}`;
     
-    // Proveri da li već postoji, ako da generiši ponovo
     const exists = await mongoose.model('Order').findOne({ orderNumber: this.orderNumber });
     if (exists) {
       const random2 = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
