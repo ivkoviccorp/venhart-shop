@@ -14,13 +14,15 @@ const { upload } = require('../middleware/upload');
 
 // Javne rute
 router.get('/', getProducts);
-router.get('/:id', getProduct);
 
 // Admin rute
 router.get('/admin/all', protect, adminOnly, getAllProductsAdmin);
 router.post('/', protect, adminOnly, upload.array('images', 5), createProduct);
 router.put('/:id', protect, adminOnly, upload.array('images', 5), updateProduct);
+router.delete('/:id/image', protect, adminOnly, deleteProductImage);
 router.delete('/:id', protect, adminOnly, deleteProduct);
-router.delete('/:id/image/:publicId', protect, adminOnly, deleteProductImage);
+
+// Mora da bude na kraju
+router.get('/:id', getProduct);
 
 module.exports = router;

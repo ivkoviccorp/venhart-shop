@@ -211,9 +211,10 @@ exports.updateProduct = async (req, res) => {
 };
 
 // @desc    Delete product image (Admin)
-// @route   DELETE /api/products/:id/image/:publicId
+// @route   DELETE /api/products/:id/image
 exports.deleteProductImage = async (req, res) => {
   try {
+    const { publicId } = req.body;
     const product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -223,9 +224,16 @@ exports.deleteProductImage = async (req, res) => {
       });
     }
 
-    await cloudinary.uploader.destroy(req.params.publicId);
+    if (!publicId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Public ID slike nije prosleđen'
+      });
+    }
 
-    product.images = product.images.filter(img => img.publicId !== req.params.publicId);
+    await cloudinary.uploader.destroy(publicId);
+
+    product.images = product.images.filter(img => img.publicId !== publicId);
     await product.save();
 
     res.json({

@@ -127,7 +127,8 @@ const ProductForm = ({ product, onClose }) => {
       setExistingImages(existingImages.filter((_, i) => i !== index));
       toast.success('Slika obrisana');
     } catch (error) {
-      toast.error('Greška pri brisanju slike');
+      console.error('Delete image error:', error);
+      toast.error(error.response?.data?.message || 'Greška pri brisanju slike');
     }
   };
 

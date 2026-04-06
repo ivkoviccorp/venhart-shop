@@ -43,7 +43,10 @@ export const productsAPI = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
   delete: (id) => api.delete(`/products/${id}`),
-  deleteImage: (productId, publicId) => api.delete(`/products/${productId}/image/${publicId}`),
+  deleteImage: (productId, publicId) =>
+    api.delete(`/products/${productId}/image`, {
+      data: { publicId }
+    }),
   getAllAdmin: () => api.get('/products/admin/all'),
 };
 
