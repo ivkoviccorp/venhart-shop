@@ -35,9 +35,9 @@ const Shop = () => {
     },
     {
       title: 'Ženske haljine i kompleti',
-      value: 'Haljine',
+      value: 'Ženske haljine i kompleti',
       image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp',
-      description: 'Elegantni modeli za upečatljiv i sofisticiran ženski stil.'
+      description: 'Elegantni modeli haljina i kompleta za upečatljiv i sofisticiran ženski stil.'
     },
     {
       title: 'Muški sakoi',
