@@ -9,7 +9,7 @@ const Shop = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const categoryFromUrl = searchParams.get('category') || '';
-  const productsSectionRef = useRef(null);
+  const categoryHeroRef = useRef(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,8 +116,8 @@ const Shop = () => {
   useEffect(() => {
     if (categoryFromUrl) {
       setTimeout(() => {
-        if (productsSectionRef.current) {
-          productsSectionRef.current.scrollIntoView({
+        if (categoryHeroRef.current) {
+          categoryHeroRef.current.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
@@ -138,15 +138,15 @@ const Shop = () => {
     }
   };
 
-  const scrollToProducts = () => {
+  const scrollToCategoryHero = () => {
     setTimeout(() => {
-      if (productsSectionRef.current) {
-        productsSectionRef.current.scrollIntoView({
+      if (categoryHeroRef.current) {
+        categoryHeroRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
       }
-    }, 120);
+    }, 150);
   };
 
   const handleFilterChange = (key, value) => {
@@ -156,16 +156,16 @@ const Shop = () => {
     if (key === 'category') {
       if (value) {
         navigate(`/shop?category=${encodeURIComponent(value)}`);
+        scrollToCategoryHero();
       } else {
         navigate('/shop');
       }
-      scrollToProducts();
     }
   };
 
   const handleCategoryCardClick = (value) => {
     navigate(`/shop?category=${encodeURIComponent(value)}`);
-    scrollToProducts();
+    scrollToCategoryHero();
   };
 
   const resetFilters = () => {
@@ -176,7 +176,6 @@ const Shop = () => {
       sort: 'newest',
     });
     navigate('/shop');
-    scrollToProducts();
   };
 
   const showSuitPromo =
@@ -270,6 +269,7 @@ const Shop = () => {
         {/* CATEGORY HERO / BANNER */}
         {activeCategory && (
           <div
+            ref={categoryHeroRef}
             className="shop-category-hero"
             style={{
               backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${activeCategory.image})`,
@@ -296,7 +296,7 @@ const Shop = () => {
           </div>
         )}
 
-        <div ref={productsSectionRef}>
+        <div>
           {loading ? (
             <div className="loading">Učitavanje proizvoda...</div>
           ) : (
