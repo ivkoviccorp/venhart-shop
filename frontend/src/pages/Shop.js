@@ -113,6 +113,19 @@ const Shop = () => {
     fetchProducts();
   }, [filters]);
 
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setTimeout(() => {
+        if (productsSectionRef.current) {
+          productsSectionRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 250);
+    }
+  }, [categoryFromUrl, products.length]);
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -133,12 +146,21 @@ const Shop = () => {
           block: 'start'
         });
       }
-    }, 100);
+    }, 120);
   };
 
   const handleFilterChange = (key, value) => {
     const updatedFilters = { ...filters, [key]: value };
     setFilters(updatedFilters);
+
+    if (key === 'category') {
+      if (value) {
+        navigate(`/shop?category=${encodeURIComponent(value)}`);
+      } else {
+        navigate('/shop');
+      }
+      scrollToProducts();
+    }
   };
 
   const handleCategoryCardClick = (value) => {
