@@ -4,6 +4,7 @@ import { productsAPI, newsletterAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
 import { toast } from 'react-toastify';
 import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent, FiMail } from 'react-icons/fi';
+import { FaGoogle, FaStar } from 'react-icons/fa';
 import './Home.css';
 
 const Home = () => {
@@ -11,6 +12,46 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [currentReview, setCurrentReview] = useState(0);
+
+  const reviews = [
+    {
+      name: 'Dženifer Ristićević',
+      text: 'Veoma širok asortiman garderobe po pristupačnim cenama, prilagođen različitim ukusima i stilovima. Domaćinska i prijatna atmosfera učinila je kupovinu posebnim iskustvom - poslužena sam turskim čajem, što je dodatno upotpunilo celokupan ugođaj. Topla preporuka da ih posetite i podržite mali domaći brend. ❤️'
+    },
+    {
+      name: 'Sara Ranković',
+      text: 'Predivan ambijent, ljubazno osoblje, divna garderoba sa cenama za svačiji džep - od dnevnih do večernjih varijanti. Pravi porodični biznis 🥰 Ja sam uzela vrlo udoban i moderan komplet i dobila pravi turski čaj dok sam birala 👚🍵'
+    },
+    {
+      name: 'Jovana Pavlović',
+      text: 'Super stvari sa odličnim kvalitetom. A cene pristupačne. Imaju i muške i ženske stvari a ja sam našla ovaj divan kaiš. Osoblje je divno i uvek spremno da pomogne i objasni. Dobijete i pravi turski čaj za potpuni ugođaj. Topla preporuka za ovaj divan butik i porodičan biznis.'
+    },
+    {
+      name: 'Nikola Pešić',
+      text: 'Ne zna se šta je bolje, da li garderoba ili ljudi koji čine ovaj unikatan butik. Sa čajem ili kafom, ovo neće biti klasična kupovina garderobe, nego nezaboravno iskustvo ❤️ Veliki pozdrav za dream tim: Steva i Veka'
+    },
+    {
+      name: 'Strahinja Simić',
+      text: 'Sjajna usluga, momci su se baš potrudili, pristupačne cene 👌'
+    },
+    {
+      name: 'Dušan Momirović',
+      text: 'Top stvari sa top cenama! Vrhunski koncept butika.'
+    },
+    {
+      name: 'Mladen Krstić',
+      text: 'Odlična radnja, iz prve sam našao sako. Preporuka!!!'
+    },
+    {
+      name: 'Marija Žarković',
+      text: 'Super usluga! Došla po jednu, izašla sa pet stvari... 😄 Sve preporuke!!'
+    },
+    {
+      name: 'M',
+      text: 'Najbolja odela na Voždovcu.'
+    }
+  ];
 
   const categoryCards = [
     {
@@ -83,6 +124,14 @@ const Home = () => {
   useEffect(() => {
     fetchFeaturedProducts();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentReview((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [reviews.length]);
 
   const fetchFeaturedProducts = async () => {
     try {
@@ -192,6 +241,61 @@ const Home = () => {
               <h3>100% sigurna kupovina</h3>
               <p>Profesionalna usluga, kvalitet i pažljivo odabrani modni komadi.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Google Reviews Section */}
+      <section className="reviews-section">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <span className="section-tag">GOOGLE RECENZIJE</span>
+              <h2 className="section-title">Šta naši kupci kažu o nama</h2>
+            </div>
+          </div>
+
+          <div className="reviews-summary">
+            <div className="reviews-summary-icon">
+              <FaGoogle />
+            </div>
+            <div className="reviews-summary-text">
+              <h3>5.0 / 5.0</h3>
+              <div className="reviews-stars">
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </div>
+              <p>Na osnovu zadovoljnih kupaca i njihovih iskustava sa Venhart Concept Store.</p>
+            </div>
+          </div>
+
+          <div className="reviews-slider">
+            <div className="review-card">
+              <div className="review-stars">
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </div>
+              <p className="review-text">“{reviews[currentReview].text}”</p>
+              <h4 className="review-name">{reviews[currentReview].name}</h4>
+              <span className="review-source">Google review</span>
+            </div>
+          </div>
+
+          <div className="reviews-dots">
+            {reviews.map((_, index) => (
+              <button
+                key={index}
+                className={`review-dot ${currentReview === index ? 'active' : ''}`}
+                onClick={() => setCurrentReview(index)}
+                aria-label={`Recenzija ${index + 1}`}
+              ></button>
+            ))}
           </div>
         </div>
       </section>

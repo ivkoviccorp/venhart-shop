@@ -196,6 +196,120 @@
   margin: 0;
 }
 
+/* Reviews Section */
+.reviews-section {
+  padding: 90px 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f9f6f1 100%);
+}
+
+.reviews-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 35px;
+  text-align: left;
+}
+
+.reviews-summary-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #ea4335;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.reviews-summary-text h3 {
+  font-size: 32px;
+  color: var(--primary-color);
+  margin-bottom: 6px;
+}
+
+.reviews-summary-text p {
+  color: #666;
+  margin: 0;
+  font-size: 15px;
+}
+
+.reviews-stars {
+  display: flex;
+  gap: 6px;
+  color: #f5b301;
+  margin-bottom: 10px;
+}
+
+.reviews-slider {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.review-card {
+  background: white;
+  border-radius: 18px;
+  padding: 38px 30px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.review-stars {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  color: #f5b301;
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.review-text {
+  font-size: 18px;
+  line-height: 1.9;
+  color: var(--text-color);
+  margin-bottom: 24px;
+}
+
+.review-name {
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.review-source {
+  font-size: 13px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.reviews-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.review-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #d7d7d7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.review-dot.active {
+  background: var(--secondary-color);
+  transform: scale(1.15);
+}
+
 /* Payment Banner */
 .payment-banner {
   padding: 35px 0 0;
@@ -713,6 +827,23 @@
 
   .first-purchase-content p {
     font-size: 14px;
+  }
+
+  .reviews-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .reviews-summary-text h3 {
+    font-size: 26px;
+  }
+
+  .review-card {
+    padding: 28px 20px;
+  }
+
+  .review-text {
+    font-size: 15px;
   }
 
   .payment-banner-box {
