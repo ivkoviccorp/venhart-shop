@@ -40,9 +40,8 @@ const ProductForm = ({ product, onClose }) => {
     'Muške majice',
     'Ženska odela',
     'Ženski sakoi',
-    'Ženski kompleti',
+    'Ženske haljine i kompleti',
     'Ženski triko komplet',
-    'Haljine',
     'Bluze',
     'Suknje',
     'Ženske pantalone',
@@ -178,7 +177,6 @@ const ProductForm = ({ product, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="product-form">
-          {/* Basic Info */}
           <div className="form-section">
             <h3>Osnovne informacije</h3>
 
@@ -260,7 +258,6 @@ const ProductForm = ({ product, onClose }) => {
             </div>
           </div>
 
-          {/* Sizes */}
           <div className="form-section">
             <h3>Veličine (slova)</h3>
             <div className="sizes-grid">
@@ -327,7 +324,6 @@ const ProductForm = ({ product, onClose }) => {
             </div>
           </div>
 
-          {/* Colors */}
           <div className="form-section">
             <h3>Boje</h3>
             <div className="colors-list">
@@ -358,7 +354,6 @@ const ProductForm = ({ product, onClose }) => {
             </div>
           </div>
 
-          {/* Images */}
           <div className="form-section">
             <h3>Slike proizvoda</h3>
 
@@ -414,7 +409,6 @@ const ProductForm = ({ product, onClose }) => {
             </label>
           </div>
 
-          {/* Options */}
           <div className="form-section">
             <h3>Opcije prikaza</h3>
             <div className="checkboxes">
@@ -450,7 +444,6 @@ const ProductForm = ({ product, onClose }) => {
             </div>
           </div>
 
-          {/* Submit */}
           <div className="form-actions">
             <button type="button" className="btn btn-cancel" onClick={onClose}>
               Otkaži
