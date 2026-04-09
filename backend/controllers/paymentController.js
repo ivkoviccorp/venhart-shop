@@ -38,7 +38,7 @@ exports.createPayment = async (req, res) => {
     const signature = generateSignature(orderNumber, CORVUSPAY_STORE_ID, amount, currency);
 
     const params = {
-      version: '1.4',
+      version: '1.3',
       store_id: CORVUSPAY_STORE_ID,
       order_number: orderNumber,
       language: 'sr',
