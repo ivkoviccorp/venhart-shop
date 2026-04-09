@@ -3,7 +3,7 @@ const Order = require('../models/Order');
 
 const CORVUSPAY_STORE_ID = process.env.CORVUSPAY_STORE_ID;
 const CORVUSPAY_SECRET_KEY = process.env.CORVUSPAY_SECRET_KEY;
-const CORVUSPAY_URL = 'https://checkout.corvuspay.com/checkout/';
+const CORVUSPAY_URL = 'https://wallet.corvuspay.com/checkout/';
 const CLIENT_URL = process.env.CLIENT_URL || 'https://venhartstore.rs';
 
 // Generiši CorvusPay HMAC potpis
