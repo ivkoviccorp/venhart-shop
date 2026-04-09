@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { ordersAPI } from '../utils/api';
+import { ordersAPI, paymentAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
 import { trackBeginCheckout, trackPurchase } from '../utils/analytics';
 import { toast } from 'react-toastify';
-import { FiMapPin, FiTruck, FiGift, FiTag } from 'react-icons/fi';
+import { FiMapPin, FiTruck, FiGift, FiTag, FiCreditCard } from 'react-icons/fi';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -20,6 +20,7 @@ const Checkout = () => {
   } = useCart();
   
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [giftWrap, setGiftWrap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -136,6 +137,7 @@ const Checkout = () => {
         },
         items: getDiscountedItemsForOrder(),
         deliveryMethod,
+        paymentMethod,
         shippingAddress: deliveryMethod === 'delivery' ? {
           street: formData.street,
           city: formData.city,
@@ -154,7 +156,38 @@ const Checkout = () => {
       if (response?.data?.order?.orderNumber) {
         trackPurchase(response.data.order.orderNumber, cartItems, finalTotal);
       }
+
+      // Ako je online plaćanje
+      if (paymentMethod === 'card' && response?.data?.order?._id) {
+        try {
+          const paymentResponse = await paymentAPI.createPayment(response.data.order._id);
+          
+          if (paymentResponse?.data?.success) {
+            // Napravi formu i redirect na CorvusPay
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = paymentResponse.data.paymentUrl;
+
+            Object.entries(paymentResponse.data.params).forEach(([key, value]) => {
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = value;
+              form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            clearCart();
+            form.submit();
+            return;
+          }
+        } catch (paymentError) {
+          console.error('Payment error:', paymentError);
+          toast.error('Greška pri pokretanju online plaćanja');
+        }
+      }
       
+      // Pouzeće
       toast.success('Porudžbina uspešno poslata! Proverite email.');
       clearCart();
       
@@ -331,6 +364,53 @@ const Checkout = () => {
                 </div>
               )}
 
+              {/* Payment Method */}
+              <div className="form-section">
+                <h3>Način plaćanja</h3>
+
+                <div className="delivery-options">
+                  <label className={`delivery-option ${paymentMethod === 'cash' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cash"
+                      checked={paymentMethod === 'cash'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <div className="option-icon">
+                      <FiTag size={24} />
+                    </div>
+                    <div className="option-content">
+                      <strong>Plaćanje pouzećem</strong>
+                      <p className="option-note">Plaćanje prilikom preuzimanja porudžbine</p>
+                    </div>
+                  </label>
+
+                  <label className={`delivery-option ${paymentMethod === 'card' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="card"
+                      checked={paymentMethod === 'card'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <div className="option-icon">
+                      <FiCreditCard size={24} />
+                    </div>
+                    <div className="option-content">
+                      <strong>Plaćanje karticom online</strong>
+                      <p className="option-note">Sigurno plaćanje putem Visa, Mastercard, Maestro ili Dina kartice</p>
+                      <div className="payment-methods-inline">
+                        <span>Visa</span>
+                        <span>Mastercard</span>
+                        <span>Maestro</span>
+                        <span>Dina</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               {/* Promo Code */}
               <div className="form-section">
                 <h3>Promo kod</h3>
@@ -446,11 +526,14 @@ const Checkout = () => {
                 className="btn btn-submit-order"
                 disabled={loading}
               >
-                {loading ? 'Slanje...' : 'Potvrdi porudžbinu'}
+                {loading ? 'Obrada...' : (paymentMethod === 'card' ? 'Plati karticom' : 'Potvrdi porudžbinu')}
               </button>
 
               <p className="payment-note">
-                💳 Plaćanje se vrši prilikom preuzimanja (pouzećem)
+                {paymentMethod === 'card' 
+                  ? '🔒 Sigurno online plaćanje putem CorvusPay sistema'
+                  : '💳 Plaćanje se vrši prilikom preuzimanja (pouzećem)'
+                }
               </p>
             </div>
           </div>

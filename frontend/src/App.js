@@ -18,6 +18,8 @@ import Checkout from './pages/Checkout';
 import About from './pages/About';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentCancel from './pages/PaymentCancel';
 
 // Components
 import Navbar from './components/common/Navbar';
@@ -52,6 +54,8 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/about" element={<About />} />
+              <Route path="/payment/success" element={<PaymentSuccess />} />
+              <Route path="/payment/cancel" element={<PaymentCancel />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/*" element={<AdminDashboard />} />
             </Routes>

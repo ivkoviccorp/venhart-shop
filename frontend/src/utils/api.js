@@ -69,4 +69,9 @@ export const newsletterAPI = {
   delete: (id) => api.delete(`/newsletter/${id}`),
 };
 
+// Payment API
+export const paymentAPI = {
+  createPayment: (orderId) => api.post('/payment/create', { orderId }),
+};
+
 export default api;
