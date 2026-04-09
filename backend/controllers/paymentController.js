@@ -6,14 +6,13 @@ const CORVUSPAY_SECRET_KEY = process.env.CORVUSPAY_SECRET_KEY;
 const CORVUSPAY_URL = 'https://wallet.corvuspay.com/checkout/';
 const CLIENT_URL = process.env.CLIENT_URL || 'https://venhartstore.rs';
 
-// Generiši CorvusPay HMAC potpis
-const generateSignature = (params) => {
-  const sortedKeys = Object.keys(params).sort();
-  const signatureString = sortedKeys.map(key => `${key}${params[key]}`).join('');
-  
+// Generiši CorvusPay HMAC SHA256 potpis
+const generateSignature = (orderNumber, storeId, amount, currency) => {
+  const message = `${orderNumber}${storeId}${amount}${currency}`;
+
   return crypto
     .createHmac('sha256', CORVUSPAY_SECRET_KEY)
-    .update(signatureString)
+    .update(message)
     .digest('hex');
 };
 
@@ -32,29 +31,32 @@ exports.createPayment = async (req, res) => {
       });
     }
 
+    const amount = order.totalAmount.toFixed(2);
+    const currency = 'RSD';
+    const orderNumber = order.orderNumber;
+
+    const signature = generateSignature(orderNumber, CORVUSPAY_STORE_ID, amount, currency);
+
     const params = {
+      version: '1.4',
       store_id: CORVUSPAY_STORE_ID,
-      order_number: order.orderNumber,
+      order_number: orderNumber,
       language: 'sr',
-      currency: 'RSD',
-      amount: order.totalAmount.toFixed(2),
-      cart: `Venhart Concept Store - ${order.orderNumber}`,
+      currency: currency,
+      amount: amount,
+      cart: `Venhart Concept Store - ${orderNumber}`,
       require_complete: 'false',
-      cardholder_name: `${order.customer.firstName} ${order.customer.lastName}`,
-      cardholder_email: order.customer.email,
-      success_url: `${CLIENT_URL}/payment/success?order=${order.orderNumber}`,
-      cancel_url: `${CLIENT_URL}/payment/cancel?order=${order.orderNumber}`,
+      signature: signature,
+      success_url: `${CLIENT_URL}/payment/success?order=${orderNumber}`,
+      cancel_url: `${CLIENT_URL}/payment/cancel?order=${orderNumber}`,
     };
 
-    const signature = generateSignature(params);
+    console.log('CorvusPay params:', params);
 
     res.json({
       success: true,
       paymentUrl: CORVUSPAY_URL,
-      params: {
-        ...params,
-        signature
-      }
+      params
     });
   } catch (error) {
     console.error('Payment error:', error);
@@ -71,7 +73,7 @@ exports.paymentCallback = async (req, res) => {
   try {
     console.log('CorvusPay callback:', req.body);
 
-    const { order_number, approval_code, language, amount, currency, signature } = req.body;
+    const { order_number, approval_code } = req.body;
 
     const order = await Order.findOne({ orderNumber: order_number });
 
