@@ -7,7 +7,7 @@ const CORVUSPAY_URL = 'https://wallet.corvuspay.com/checkout/';
 const CLIENT_URL = process.env.CLIENT_URL || 'https://venhartstore.rs';
 
 // Generiši CorvusPay HMAC SHA256 potpis
-// Svi parametri sortirani abecedno kao paramNameparamValue
+// SVE parametre sortiramo abecedno i spajamo kao paramNameparamValue
 const generateSignature = (params) => {
   const sortedKeys = Object.keys(params).sort();
   const message = sortedKeys.map(key => `${key}${params[key]}`).join('');
@@ -36,29 +36,27 @@ exports.createPayment = async (req, res) => {
     }
 
     const amount = order.totalAmount.toFixed(2);
+    const successUrl = `${CLIENT_URL}/payment/success?order=${order.orderNumber}`;
+    const cancelUrl = `${CLIENT_URL}/payment/cancel?order=${order.orderNumber}`;
 
-    // Parametri koji se šalju na CorvusPay
-    // SVE ovo ulazi u signature kalkulaciju
-    const paramsForSignature = {
-      version: '1.4',
-      store_id: CORVUSPAY_STORE_ID,
-      order_number: order.orderNumber,
-      language: 'sr',
-      currency: 'RSD',
-      amount: amount,
-      cart: `Venhart Concept Store - ${order.orderNumber}`,
-      require_complete: 'false',
-    };
-
-    const signature = generateSignature(paramsForSignature);
-
-    // Kompletni parametri za POST formu (uključujući signature i URL-ove)
+    // SVI parametri koji se šalju — SVI ulaze u signature
     const allParams = {
-      ...paramsForSignature,
-      signature: signature,
-      success_url: `${CLIENT_URL}/payment/success?order=${order.orderNumber}`,
-      cancel_url: `${CLIENT_URL}/payment/cancel?order=${order.orderNumber}`,
+      amount: amount,
+      cancel_url: cancelUrl,
+      cart: `Venhart Concept Store - ${order.orderNumber}`,
+      currency: 'RSD',
+      language: 'sr',
+      order_number: order.orderNumber,
+      require_complete: 'false',
+      store_id: CORVUSPAY_STORE_ID,
+      success_url: successUrl,
+      version: '1.4',
     };
+
+    const signature = generateSignature(allParams);
+
+    // Dodaj signature u parametre
+    allParams.signature = signature;
 
     console.log('CorvusPay params:', allParams);
     console.log('Signature:', signature);
