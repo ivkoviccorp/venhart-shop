@@ -7,7 +7,6 @@ const CORVUSPAY_URL = 'https://wallet.corvuspay.com/checkout/';
 const CLIENT_URL = process.env.CLIENT_URL || 'https://venhartstore.rs';
 
 // Generiši CorvusPay HMAC SHA256 potpis
-// SVE parametre sortiramo abecedno i spajamo kao paramNameparamValue
 const generateSignature = (params) => {
   const sortedKeys = Object.keys(params).sort();
   const message = sortedKeys.map(key => `${key}${params[key]}`).join('');
@@ -36,27 +35,29 @@ exports.createPayment = async (req, res) => {
     }
 
     const amount = order.totalAmount.toFixed(2);
-    const successUrl = `${CLIENT_URL}/payment/success?order=${order.orderNumber}`;
-    const cancelUrl = `${CLIENT_URL}/payment/cancel?order=${order.orderNumber}`;
 
-    // SVI parametri koji se šalju — SVI ulaze u signature
-    const allParams = {
+    // Parametri za signature — samo oni koji ulaze u HMAC
+    const paramsForSignature = {
       amount: amount,
-      cancel_url: cancelUrl,
       cart: `Venhart Concept Store - ${order.orderNumber}`,
+      cardholder_country_code: 'RS',
       currency: 'RSD',
       language: 'sr',
       order_number: order.orderNumber,
       require_complete: 'false',
       store_id: CORVUSPAY_STORE_ID,
-      success_url: successUrl,
-      version: '1.4',
+      version: '1.6',
     };
 
-    const signature = generateSignature(allParams);
+    const signature = generateSignature(paramsForSignature);
 
-    // Dodaj signature u parametre
-    allParams.signature = signature;
+    // Kompletni parametri za POST formu
+    const allParams = {
+      ...paramsForSignature,
+      signature: signature,
+      success_url: `${CLIENT_URL}/payment/success?order=${order.orderNumber}`,
+      cancel_url: `${CLIENT_URL}/payment/cancel?order=${order.orderNumber}`,
+    };
 
     console.log('CorvusPay params:', allParams);
     console.log('Signature:', signature);
