@@ -73,7 +73,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2026 Developed by <strong>ivkovickorp</strong>. All rights reserved.</p>
+        <p>© 2026 Developed by <strong>ivkovic.web</strong>. All rights reserved.</p>
       </div>
     </footer>
   );
