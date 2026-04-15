@@ -866,6 +866,25 @@
     font-size: 13px;
     padding: 8px 12px;
   }
+  .payment-banner-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: rgba(39, 174, 96, 0.12);
+  color: #27ae60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.payment-secure-note {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #888;
+  letter-spacing: 0.5px;
+}
 
   .brand-highlight-content {
     padding: 40px 22px;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { productsAPI, newsletterAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
 import { toast } from 'react-toastify';
-import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent, FiMail } from 'react-icons/fi';
+import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent, FiMail, FiLock } from 'react-icons/fi';
 import { FaGoogle, FaStar } from 'react-icons/fa';
 import './Home.css';
 
@@ -66,7 +66,7 @@ const Home = () => {
     },
     {
       title: 'Ženske haljine i kompleti',
-      value: 'Haljine',
+      value: 'Ženske haljine i kompleti',
       image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp'
     },
     {
@@ -281,7 +281,7 @@ const Home = () => {
                 <FaStar />
                 <FaStar />
               </div>
-              <p className="review-text">“{reviews[currentReview].text}”</p>
+              <p className="review-text">"{reviews[currentReview].text}"</p>
               <h4 className="review-name">{reviews[currentReview].name}</h4>
               <span className="review-source">Google review</span>
             </div>
@@ -300,22 +300,28 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Payment Coming Soon Banner */}
+      {/* Secure Payment Banner */}
       <section className="payment-banner">
         <div className="container">
           <div className="payment-banner-box">
-            <span className="payment-badge">USKORO</span>
-            <h2>Online plaćanje karticama uskoro dostupno</h2>
+            <div className="payment-banner-icon">
+              <FiLock />
+            </div>
+            <span className="payment-badge">SIGURNA KUPOVINA</span>
+            <h2>Sigurno online plaćanje karticama</h2>
             <p>
-              Trenutno je dostupno plaćanje pouzećem, a uskoro uvodimo i online plaćanje
-              karticama radi još brže i jednostavnije kupovine.
+              Kupujte brzo, jednostavno i bezbedno. Vaši podaci su zaštićeni najsavremenijim 
+              sigurnosnim standardima putem CorvusPay sistema za online plaćanje.
             </p>
             <div className="payment-methods">
               <span>Visa</span>
               <span>Mastercard</span>
-              <span>Dina</span>
               <span>Maestro</span>
+              <span>Dina</span>
             </div>
+            <p className="payment-secure-note">
+              🔒 SSL zaštita • 3D Secure verifikacija • PCI DSS standard
+            </p>
           </div>
         </div>
       </section>
