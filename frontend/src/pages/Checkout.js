@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ordersAPI, paymentAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
-import { trackBeginCheckout, trackPurchase } from '../utils/analytics';
+import { trackBeginCheckout } from '../utils/analytics';
 import { toast } from 'react-toastify';
 import { FiMapPin, FiTruck, FiGift, FiTag, FiCreditCard } from 'react-icons/fi';
 import './Checkout.css';
@@ -88,7 +88,6 @@ const Checkout = () => {
       if (isTie && discountedTieCountLeft > 0) {
         const discountedQty = Math.min(item.quantity, discountedTieCountLeft);
         discountedTieCountLeft -= discountedQty;
-
         const discountedPrice = item.product.price * 0.8;
 
         return {
@@ -153,17 +152,16 @@ const Checkout = () => {
 
       const response = await ordersAPI.create(orderData);
 
-      if (response?.data?.order?.orderNumber) {
-        trackPurchase(response.data.order.orderNumber, cartItems, finalTotal);
-      }
+      // Purchase event se NE pali ovde!
+      // Za karticu - pali se na PaymentSuccess stranici
+      // Za pouzeće - pali se na OrderConfirmation stranici
 
-      // Ako je online plaćanje
+      // Ako je online plaćanje karticom
       if (paymentMethod === 'card' && response?.data?.order?._id) {
         try {
           const paymentResponse = await paymentAPI.createPayment(response.data.order._id);
           
           if (paymentResponse?.data?.success) {
-            // Napravi formu i redirect na CorvusPay
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = paymentResponse.data.paymentUrl;
@@ -176,6 +174,13 @@ const Checkout = () => {
               form.appendChild(input);
             });
 
+            // Sačuvaj podatke za Purchase event na PaymentSuccess stranici
+            localStorage.setItem('lastPurchaseData', JSON.stringify({
+              cartItems: cartItems,
+              totalValue: finalTotal,
+              orderNumber: response.data.order.orderNumber
+            }));
+
             document.body.appendChild(form);
             clearCart();
             form.submit();
@@ -187,13 +192,23 @@ const Checkout = () => {
         }
       }
       
-      // Pouzeće
+      // Pouzeće - sačuvaj podatke i idi na order confirmation
+      const orderNumber = response?.data?.order?.orderNumber;
+
+      // Sačuvaj podatke za Purchase event
+      localStorage.setItem('lastPurchaseData', JSON.stringify({
+        cartItems: cartItems,
+        totalValue: finalTotal,
+        orderNumber: orderNumber
+      }));
+
       toast.success('Porudžbina uspešno poslata! Proverite email.');
       clearCart();
       
+      // Redirect na order confirmation sa order numberom
       setTimeout(() => {
-        navigate('/');
-      }, 2000);
+        navigate(`/order-confirmation?order=${orderNumber}`);
+      }, 1000);
       
     } catch (error) {
       console.error('Error creating order:', error);
@@ -215,7 +230,6 @@ const Checkout = () => {
 
         <form onSubmit={handleSubmit} className="checkout-form">
           <div className="checkout-grid">
-            {/* Left Side - Form */}
             <div className="checkout-details">
               <div className="form-section">
                 <h3>Kontakt informacije</h3>
@@ -364,7 +378,6 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Payment Method */}
               <div className="form-section">
                 <h3>Način plaćanja</h3>
 
@@ -411,7 +424,6 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Promo Code */}
               <div className="form-section">
                 <h3>Promo kod</h3>
                 <div className="promo-code-box">
@@ -454,7 +466,6 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Right Side - Order Summary */}
             <div className="order-summary">
               <h3>Vaša porudžbina</h3>
 
