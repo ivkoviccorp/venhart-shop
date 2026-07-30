@@ -34,6 +34,12 @@ const Shop = () => {
       description: 'Klasična i savremena odela za poslovne i svečane prilike.'
     },
     {
+      title: 'Muške bermude',
+      value: 'Muške bermude',
+      image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1785433211/IMG-20260730-WA0003_a0giel.jpg',
+      description: 'Savremeni krojevi i lagani materijali za savršen letnji stil u svakoj prilici.'
+    },
+    {
       title: 'Ženske haljine i kompleti',
       value: 'Ženske haljine i kompleti',
       image: 'https://res.cloudinary.com/ddpyveu6d/image/upload/v1774469591/venhart-shop/go7hpljtjnkxh53rjq8o.webp',
