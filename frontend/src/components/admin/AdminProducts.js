@@ -21,6 +21,7 @@ const AdminProducts = () => {
     'Muške košulje i natkošulje',
     'Muške farmerke',
     'Muške pantalone',
+    'Muške bermude',
     'Muške majice',
     'Ženska odela',
     'Ženski sakoi',
