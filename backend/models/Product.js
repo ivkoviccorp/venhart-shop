@@ -39,6 +39,7 @@ const productSchema = new mongoose.Schema({
       'Muške košulje i natkošulje',
       'Muške farmerke',
       'Muške pantalone',
+      'Muške bermude',
       'Muške majice',
       'Ženska odela',
       'Ženski sakoi',
