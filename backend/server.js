@@ -13,6 +13,9 @@ connectDB();
 
 const app = express();
 
+// Trust proxy - potrebno za Render (proxy server)
+app.set('trust proxy', 1);
+
 // CORS - MORA BITI PRVO!
 app.use(cors());
 
