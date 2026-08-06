@@ -40,12 +40,34 @@ function ScrollToTop() {
   return null;
 }
 
+// Prati promenu rute za Meta Pixel i GA4
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Meta Pixel PageView po svakoj promeni rute
+    if (window.fbq) {
+      window.fbq('track', 'PageView');
+    }
+
+    // GA4 page_view po svakoj promeni rute
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: location.pathname + location.search
+      });
+    }
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
           <ScrollToTop />
+          <RouteTracker />
           <div className="App">
             <Navbar />
             <Routes>

@@ -8,47 +8,19 @@ const PaymentSuccess = () => {
   const orderNumber = searchParams.get('order') || '';
 
   useEffect(() => {
-    // Purchase event se pali OVDE i SAMO OVDE za online plaćanje
     if (orderNumber) {
-      // Pokušavamo da uzmemo cart iz localStorage pre nego što je obrisan
-      const savedCart = localStorage.getItem('lastPurchaseData');
-      if (savedCart) {
+      const savedPurchaseData = localStorage.getItem('lastPurchaseData');
+
+      if (savedPurchaseData) {
         try {
-          const { cartItems, totalValue } = JSON.parse(savedCart);
-          trackPurchase(orderNumber, cartItems, totalValue);
-          localStorage.removeItem('lastPurchaseData');
-        } catch (e) {
-          // Fallback - pali Purchase bez detalja
-          if (window.fbq) {
-            window.fbq('track', 'Purchase', {
-              value: 0,
-              currency: 'RSD',
-              order_id: orderNumber
-            });
+          const parsed = JSON.parse(savedPurchaseData);
+
+          if (parsed.orderNumber === orderNumber) {
+            trackPurchase(orderNumber, parsed.cartItems, parsed.totalValue);
+            localStorage.removeItem('lastPurchaseData');
           }
-          if (window.gtag) {
-            window.gtag('event', 'purchase', {
-              transaction_id: orderNumber,
-              currency: 'RSD',
-              value: 0
-            });
-          }
-        }
-      } else {
-        // Fallback - pali Purchase bez detalja
-        if (window.fbq) {
-          window.fbq('track', 'Purchase', {
-            value: 0,
-            currency: 'RSD',
-            order_id: orderNumber
-          });
-        }
-        if (window.gtag) {
-          window.gtag('event', 'purchase', {
-            transaction_id: orderNumber,
-            currency: 'RSD',
-            value: 0
-          });
+        } catch (error) {
+          console.error('Greška pri čitanju purchase podataka:', error);
         }
       }
     }
@@ -66,16 +38,19 @@ const PaymentSuccess = () => {
       <p style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>
         Vaša porudžbina je primljena i plaćanje je uspešno obrađeno.
       </p>
-      <Link to="/" style={{
-        display: 'inline-block',
-        marginTop: '30px',
-        padding: '14px 30px',
-        background: '#1a1a1a',
-        color: 'white',
-        borderRadius: '8px',
-        textDecoration: 'none',
-        fontWeight: '600'
-      }}>
+      <Link
+        to="/"
+        style={{
+          display: 'inline-block',
+          marginTop: '30px',
+          padding: '14px 30px',
+          background: '#1a1a1a',
+          color: 'white',
+          borderRadius: '8px',
+          textDecoration: 'none',
+          fontWeight: '600'
+        }}
+      >
         Nazad na početnu
       </Link>
     </div>
