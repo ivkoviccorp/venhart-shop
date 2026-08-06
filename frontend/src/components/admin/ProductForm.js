@@ -33,6 +33,7 @@ const ProductForm = ({ product, onClose }) => {
   const categories = [
     'Muška odela',
     'Muški sakoi',
+    'Muške bermude',
     'Muški džemperi',
     'Muške košulje i natkošulje',
     'Muške farmerke',
