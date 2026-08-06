@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/formatPrice';
-import { FiTrash2, FiShoppingBag, FiTag } from 'react-icons/fi';
+import { FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import './Cart.css';
 
 const Cart = () => {
@@ -12,9 +12,7 @@ const Cart = () => {
     updateQuantity,
     getTotalPrice,
     getSubtotalPrice,
-    getTotalItems,
-    getTieDiscount,
-    getDiscountedTieCount
+    getTotalItems
   } = useCart();
 
   const navigate = useNavigate();
@@ -103,23 +101,6 @@ const Cart = () => {
               <span>Međuzbir:</span>
               <span>{formatPrice(getSubtotalPrice())}</span>
             </div>
-
-            {getTieDiscount() > 0 && (
-              <>
-                <div className="cart-discount-info">
-                  <FiTag />
-                  <span>
-                    Akcija: uz muško odelo kravata je 20% jeftinija
-                    {getDiscountedTieCount() > 0 && ` (${getDiscountedTieCount()} kom)`}
-                  </span>
-                </div>
-
-                <div className="summary-row discount">
-                  <span>Popust na kravatu:</span>
-                  <span>- {formatPrice(getTieDiscount())}</span>
-                </div>
-              </>
-            )}
 
             <div className="summary-row total">
               <span>Ukupno:</span>

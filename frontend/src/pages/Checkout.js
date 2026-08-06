@@ -5,7 +5,7 @@ import { ordersAPI, paymentAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
 import { trackBeginCheckout } from '../utils/analytics';
 import { toast } from 'react-toastify';
-import { FiMapPin, FiTruck, FiGift, FiTag, FiCreditCard } from 'react-icons/fi';
+import { FiMapPin, FiTruck, FiGift, FiCreditCard } from 'react-icons/fi';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -14,8 +14,6 @@ const Checkout = () => {
     cartItems,
     getTotalPrice,
     getSubtotalPrice,
-    getTieDiscount,
-    getDiscountedTieCount,
     clearCart
   } = useCart();
   
@@ -23,9 +21,6 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [giftWrap, setGiftWrap] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [promoCode, setPromoCode] = useState('');
-  const [promoDiscount, setPromoDiscount] = useState(0);
-  const [promoApplied, setPromoApplied] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -41,8 +36,7 @@ const Checkout = () => {
   const shippingCost = 0;
   const giftWrapCost = giftWrap ? 200 : 0;
 
-  const subtotalWithTieDiscount = getTotalPrice();
-  const finalTotal = subtotalWithTieDiscount - promoDiscount + shippingCost + giftWrapCost;
+  const finalTotal = getTotalPrice() + shippingCost + giftWrapCost;
 
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -55,65 +49,16 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const applyPromoCode = () => {
-    if (!promoCode.trim()) {
-      toast.warning('Unesite promo kod');
-      return;
-    }
-
-    if (promoCode.trim().toUpperCase() !== 'PRVA10') {
-      toast.error('Promo kod nije ispravan');
-      return;
-    }
-
-    const discountAmount = subtotalWithTieDiscount * 0.10;
-    setPromoDiscount(discountAmount);
-    setPromoApplied(true);
-    toast.success('Promo kod je uspešno primenjen');
-  };
-
-  const removePromoCode = () => {
-    setPromoCode('');
-    setPromoDiscount(0);
-    setPromoApplied(false);
-    toast.info('Promo kod je uklonjen');
-  };
-
-  const getDiscountedItemsForOrder = () => {
-    let discountedTieCountLeft = getDiscountedTieCount();
-
-    return cartItems.map((item) => {
-      const isTie = item.product.category === 'Muške kravate i aksesoari';
-
-      if (isTie && discountedTieCountLeft > 0) {
-        const discountedQty = Math.min(item.quantity, discountedTieCountLeft);
-        discountedTieCountLeft -= discountedQty;
-        const discountedPrice = item.product.price * 0.8;
-
-        return {
-          product: item.product._id,
-          name: item.product.name,
-          price: discountedPrice,
-          originalPrice: item.product.price,
-          size: item.size,
-          color: item.color,
-          quantity: item.quantity,
-          image: item.product.images[0]?.url,
-          hasDiscount: true
-        };
-      }
-
-      return {
-        product: item.product._id,
-        name: item.product.name,
-        price: item.product.price,
-        size: item.size,
-        color: item.color,
-        quantity: item.quantity,
-        image: item.product.images[0]?.url,
-        hasDiscount: false
-      };
-    });
+  const getItemsForOrder = () => {
+    return cartItems.map((item) => ({
+      product: item.product._id,
+      name: item.product.name,
+      price: item.product.price,
+      size: item.size,
+      color: item.color,
+      quantity: item.quantity,
+      image: item.product.images[0]?.url,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -134,7 +79,7 @@ const Checkout = () => {
           email: formData.email,
           phone: formData.phone,
         },
-        items: getDiscountedItemsForOrder(),
+        items: getItemsForOrder(),
         deliveryMethod,
         paymentMethod,
         shippingAddress: deliveryMethod === 'delivery' ? {
@@ -146,17 +91,10 @@ const Checkout = () => {
         shippingCost: shippingCost + giftWrapCost,
         totalAmount: finalTotal,
         giftWrap,
-        promoCode: promoApplied ? promoCode.trim().toUpperCase() : null,
-        promoDiscount
       };
 
       const response = await ordersAPI.create(orderData);
 
-      // Purchase event se NE pali ovde!
-      // Za karticu - pali se na PaymentSuccess stranici
-      // Za pouzeće - pali se na OrderConfirmation stranici
-
-      // Ako je online plaćanje karticom
       if (paymentMethod === 'card' && response?.data?.order?._id) {
         try {
           const paymentResponse = await paymentAPI.createPayment(response.data.order._id);
@@ -174,7 +112,6 @@ const Checkout = () => {
               form.appendChild(input);
             });
 
-            // Sačuvaj podatke za Purchase event na PaymentSuccess stranici
             localStorage.setItem('lastPurchaseData', JSON.stringify({
               cartItems: cartItems,
               totalValue: finalTotal,
@@ -192,10 +129,8 @@ const Checkout = () => {
         }
       }
       
-      // Pouzeće - sačuvaj podatke i idi na order confirmation
       const orderNumber = response?.data?.order?.orderNumber;
 
-      // Sačuvaj podatke za Purchase event
       localStorage.setItem('lastPurchaseData', JSON.stringify({
         cartItems: cartItems,
         totalValue: finalTotal,
@@ -205,7 +140,6 @@ const Checkout = () => {
       toast.success('Porudžbina uspešno poslata! Proverite email.');
       clearCart();
       
-      // Redirect na order confirmation sa order numberom
       setTimeout(() => {
         navigate(`/order-confirmation?order=${orderNumber}`);
       }, 1000);
@@ -391,7 +325,7 @@ const Checkout = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                     />
                     <div className="option-icon">
-                      <FiTag size={24} />
+                      <FiCreditCard size={24} />
                     </div>
                     <div className="option-content">
                       <strong>Plaćanje pouzećem</strong>
@@ -422,29 +356,6 @@ const Checkout = () => {
                     </div>
                   </label>
                 </div>
-              </div>
-
-              <div className="form-section">
-                <h3>Promo kod</h3>
-                <div className="promo-code-box">
-                  <input
-                    type="text"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    placeholder="Unesite promo kod"
-                    disabled={promoApplied}
-                  />
-                  {!promoApplied ? (
-                    <button type="button" className="btn btn-apply-promo" onClick={applyPromoCode}>
-                      Primeni
-                    </button>
-                  ) : (
-                    <button type="button" className="btn btn-remove-promo" onClick={removePromoCode}>
-                      Ukloni
-                    </button>
-                  )}
-                </div>
-                <p className="promo-hint">Promo kod za prvu kupovinu: <strong>PRVA10</strong></p>
               </div>
 
               <div className="form-section gift-section">
@@ -494,30 +405,6 @@ const Checkout = () => {
                   <span>Međuzbir:</span>
                   <span>{formatPrice(getSubtotalPrice())}</span>
                 </div>
-
-                {getTieDiscount() > 0 && (
-                  <>
-                    <div className="summary-discount-note">
-                      <FiTag />
-                      <span>
-                        Akcija: kravata 20% jeftinije uz muško odelo
-                        {getDiscountedTieCount() > 0 && ` (${getDiscountedTieCount()} kom)`}
-                      </span>
-                    </div>
-
-                    <div className="summary-row discount">
-                      <span>Popust na kravatu:</span>
-                      <span>- {formatPrice(getTieDiscount())}</span>
-                    </div>
-                  </>
-                )}
-
-                {promoDiscount > 0 && (
-                  <div className="summary-row discount">
-                    <span>Promo kod ({promoCode.toUpperCase()}):</span>
-                    <span>- {formatPrice(promoDiscount)}</span>
-                  </div>
-                )}
 
                 {giftWrap && (
                   <div className="summary-row gift-row">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { productsAPI, newsletterAPI } from '../utils/api';
 import { formatPrice } from '../utils/formatPrice';
 import { toast } from 'react-toastify';
-import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiPercent, FiMail, FiLock } from 'react-icons/fi';
+import { FiShield, FiRefreshCw, FiTruck, FiCreditCard, FiCheckCircle, FiArrowRight, FiMail, FiLock } from 'react-icons/fi';
 import { FaGoogle, FaStar } from 'react-icons/fa';
 import './Home.css';
 
@@ -182,25 +182,6 @@ const Home = () => {
           <Link to="/shop" className="btn btn-hero">
             Pogledaj kolekciju
           </Link>
-        </div>
-      </section>
-
-      {/* First Purchase Discount Banner */}
-      <section className="first-purchase-banner">
-        <div className="container">
-          <div className="first-purchase-box">
-            <div className="first-purchase-icon">
-              <FiPercent />
-            </div>
-            <div className="first-purchase-content">
-              <span className="first-purchase-badge">SPECIJALNA PONUDA</span>
-              <h2>10% POPUSTA NA PRVU KUPOVINU PREKO SAJTA</h2>
-              <p>
-                Iskoristite specijalnu pogodnost i ostvarite popust na svoju prvu online porudžbinu.
-                Kupujte jednostavno, sigurno i uz dodatnu uštedu.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 

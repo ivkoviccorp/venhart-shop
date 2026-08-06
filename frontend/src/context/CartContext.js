@@ -105,51 +105,13 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem('venhartCart');
   };
 
-  // Broj muških odela u korpi
-  const getSuitCount = () => {
-    return cartItems.reduce((count, item) => {
-      if (item.product.category === 'Muška odela') {
-        return count + item.quantity;
-      }
-      return count;
-    }, 0);
-  };
-
-  // Broj kravata u korpi
-  const getTieCount = () => {
-    return cartItems.reduce((count, item) => {
-      if (item.product.category === 'Muške kravate i aksesoari') {
-        return count + item.quantity;
-      }
-      return count;
-    }, 0);
-  };
-
-  // Ukupan broj kravata koje dobijaju popust
-  const getDiscountedTieCount = () => {
-    const suits = getSuitCount();
-    const ties = getTieCount();
-    return Math.min(suits, ties);
-  };
-
-  // Ukupan iznos popusta na kravate
-  const getTieDiscount = () => {
-    const discountedTieCount = getDiscountedTieCount();
-    const discountPerTie = 2000 * 0.2; // 20% od 2000 = 400
-    return discountedTieCount * discountPerTie;
-  };
-
-  // Ukupna cena sa popustom
   const getTotalPrice = () => {
-    const subtotal = cartItems.reduce(
+    return cartItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0
     );
-
-    return subtotal - getTieDiscount();
   };
 
-  // Cena bez popusta
   const getSubtotalPrice = () => {
     return cartItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
@@ -170,10 +132,6 @@ export const CartProvider = ({ children }) => {
     getTotalPrice,
     getSubtotalPrice,
     getTotalItems,
-    getSuitCount,
-    getTieCount,
-    getDiscountedTieCount,
-    getTieDiscount,
     getAvailableStockForSize,
   };
 

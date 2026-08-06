@@ -1,6 +1,11 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { sendOrderConfirmation, sendAdminNotification, sendOrderAccepted, sendOrderRejected } = require('../utils/sendEmail');
+const {
+  sendOrderConfirmation,
+  sendAdminNotification,
+  sendOrderAccepted,
+  sendOrderRejected
+} = require('../utils/sendEmail');
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -8,7 +13,7 @@ exports.createOrder = async (req, res) => {
   try {
     console.log('=== NOVA PORUDŽBINA ===');
     console.log('Body:', JSON.stringify(req.body, null, 2));
-    
+
     const {
       customer,
       items,
@@ -16,9 +21,7 @@ exports.createOrder = async (req, res) => {
       shippingAddress,
       shippingCost,
       totalAmount,
-      giftWrap,
-      promoCode,
-      promoDiscount
+      giftWrap
     } = req.body;
 
     console.log('Provera zaliha...');
@@ -53,20 +56,6 @@ exports.createOrder = async (req, res) => {
       }
     }
 
-    // Provera promo koda za prvu kupovinu
-    if (promoCode && promoCode === 'PRVA10') {
-      const existingOrder = await Order.findOne({
-        'customer.email': customer.email
-      });
-
-      if (existingOrder) {
-        return res.status(400).json({
-          success: false,
-          message: 'Promo kod PRVA10 važi samo za prvu kupovinu'
-        });
-      }
-    }
-
     console.log('Kreiranje porudžbine...');
 
     const order = await Order.create({
@@ -76,9 +65,7 @@ exports.createOrder = async (req, res) => {
       shippingAddress: deliveryMethod === 'delivery' ? shippingAddress : undefined,
       shippingCost: shippingCost || 0,
       giftWrap: giftWrap || false,
-      totalAmount,
-      promoCode: promoCode || null,
-      promoDiscount: promoDiscount || 0
+      totalAmount
     });
 
     console.log('Porudžbina kreirana:', order.orderNumber);
@@ -89,9 +76,11 @@ exports.createOrder = async (req, res) => {
 
       if (product && item.size) {
         const sizeObj = product.sizes.find((s) => s.size === item.size);
+
         if (sizeObj) {
           sizeObj.stock = Math.max(0, sizeObj.stock - item.quantity);
         }
+
         await product.save();
       }
     }
@@ -101,7 +90,7 @@ exports.createOrder = async (req, res) => {
       console.log('Slanje emaila kupcu...');
       await sendOrderConfirmation(order);
       console.log('Email kupcu poslat!');
-      
+
       console.log('Slanje emaila adminu...');
       await sendAdminNotification(order);
       console.log('Email adminu poslat!');
@@ -117,7 +106,7 @@ exports.createOrder = async (req, res) => {
     console.error('=== GREŠKA PRI KREIRANJU PORUDŽBINE ===');
     console.error('Error message:', error.message);
     console.error('Error stack:', error.stack);
-    
+
     res.status(500).json({
       success: false,
       message: error.message
@@ -204,8 +193,14 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     order.status = status;
-    if (rejectionReason) order.rejectionReason = rejectionReason;
-    if (adminNote) order.adminNote = adminNote;
+
+    if (rejectionReason) {
+      order.rejectionReason = rejectionReason;
+    }
+
+    if (adminNote) {
+      order.adminNote = adminNote;
+    }
 
     await order.save();
 
@@ -336,7 +331,9 @@ exports.getDashboardStats = async (req, res) => {
       }
     ]);
 
-    const revenueThisWeek = revenueThisWeekResult.length > 0 ? revenueThisWeekResult[0].total : 0;
+    const revenueThisWeek = revenueThisWeekResult.length > 0
+      ? revenueThisWeekResult[0].total
+      : 0;
 
     const recentOrders = await Order.find()
       .sort({ createdAt: -1 })
